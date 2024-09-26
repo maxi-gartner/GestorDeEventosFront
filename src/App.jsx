@@ -1,3 +1,4 @@
+import "./index.css";
 import { useState } from "react";
 
 const navigation = [
@@ -23,9 +24,15 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-gray-800 fixed w-screen h-[10vh] z-50 top-0">
+      <nav className="bg-[#312e31] fixed w-screen h-[10vh] z-50 top-0">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-          <div className="relative flex h-16 items-center justify-between">
+          <div className="relative flex h-16 items-center justify-center font-sketchnote">
+            <h2 className="text-3xl font-bold w-full text-center Sketchnote">
+              Event
+              <span className="text-4xl font-extrabold text-yellow-500 shadow-lg transform hover:scale-110 transition-transform duration-300">
+                Hub
+              </span>
+            </h2>
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               <button
                 onClick={() => setOpen(!open)}
@@ -77,7 +84,7 @@ export default function Navbar() {
                         item.current
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "rounded-md px-3 py-2 text-sm font-medium"
+                        "rounded-md px-3 py-2 text-3xl"
                       )}
                     >
                       {item.name}
@@ -90,8 +97,12 @@ export default function Navbar() {
         </div>
 
         {/* Menú desplegable en móvil */}
-        <div className={`${open ? "block" : "hidden"} sm:hidden bg-white`}>
-          <div className="space-y-1 px-2 pb-3 pt-2">
+        <div
+          className={`${open ? "block" : "hidden"} sm:hidden h-screen`}
+          onClick={() => setOpen(!open)}
+        >
+          {" "}
+          <div className="space-y-1 px-2 pb-3 pt-2  bg-[#312e31]">
             {navigation.map((item) => (
               <a
                 key={item.name}
@@ -99,9 +110,9 @@ export default function Navbar() {
                 aria-current={item.current ? "page" : undefined}
                 className={classNames(
                   item.current
-                    ? "bg-gray-900 text-white"
-                    : "text-gray-700 hover:bg-gray-200 hover:text-black",
-                  "block rounded-md px-3 py-2 text-base font-medium"
+                    ? "font-extrabold text-yellow-500 shadow-md shadow-black/30 hover:bg-[#1c1d21]"
+                    : "text-white hover:bg-[#1c1d21] hover:text-white",
+                  "block rounded-md px-3 py-2 text-base font-medium "
                 )}
               >
                 {item.name}
@@ -143,51 +154,61 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between">
             <div className="mb-4 md:mb-0">
-              <h5 className="text-lg font-semibold">Información</h5>
+              <h5 className="text-lg font-semibold">Information</h5>
               <ul className="list-none mt-2">
                 <li>
                   <a href="#" className="text-gray-400 hover:text-white">
-                    Sobre Nosotros
+                    About Us
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-gray-400 hover:text-white">
-                    Política de Privacidad
+                    Privacy Policy
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-gray-400 hover:text-white">
-                    Términos de Servicio
+                    Terms of Service
                   </a>
                 </li>
               </ul>
             </div>
 
             <div className="mb-4 md:mb-0">
-              <h5 className="text-lg font-semibold">Contacto</h5>
+              <h5 className="text-lg font-semibold">Contact</h5>
               <p className="text-gray-400 mt-2">Email: info@example.com</p>
-              <p className="text-gray-400">Teléfono: +54 9 11 1234-5678</p>
+              <p className="text-gray-400">Phone: +54 9 11 1234-5678</p>
             </div>
 
             <div>
-              <h5 className="text-lg font-semibold">Síguenos</h5>
+              <h5 className="text-lg font-semibold">Follow Us</h5>
               <div className="flex space-x-4 mt-2">
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a
+                  href="https://github.com/your-repo"
+                  className="text-gray-400 hover:text-white"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg
                     className="h-6 w-6"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M24 4.557c-.883.389-1.83.654-2.825.775 1.014-.609 1.794-1.574 2.163-2.724-.951.56-2.005.973-3.127 1.195-.895-.955-2.166-1.55-3.584-1.55-2.713 0-4.915 2.207-4.915 4.917 0 .386.043.761.127 1.124-4.083-.205-7.7-2.159-10.14-5.134-.423.727-.666 1.571-.666 2.477 0 1.71.87 3.215 2.188 4.091-.806-.025-1.564-.247-2.228-.616v.062c0 2.389 1.693 4.384 3.94 4.834-.412.111-.846.171-1.292.171-.316 0-.623-.031-.923-.088.624 1.953 2.433 3.375 4.577 3.415-1.676 1.313-3.785 2.095-6.069 2.095-.394 0-.785-.023-1.169-.067 2.17 1.392 4.768 2.206 7.548 2.206 9.056 0 14.007-7.494 14.007-13.973 0-.213-.004-.426-.012-.637.961-.695 1.796-1.562 2.457-2.549z" />
+                    <path d="M12 .297c-6.627 0-12 5.373-12 12 0 5.304 3.438 9.8 8.207 11.388.6.111.793-.26.793-.577 0-.285-.011-1.236-.017-2.236-3.338.724-4.043-1.608-4.043-1.608-.546-1.384-1.333-1.754-1.333-1.754-1.086-.742.082-.727.082-.727 1.204.085 1.837 1.237 1.837 1.237 1.068 1.826 2.803 1.297 3.487.992.108-.774.42-1.297.763-1.597-2.665-.303-5.467-1.334-5.467-5.928 0-1.311.468-2.384 1.236-3.22-.124-.303-.536-1.52.117-3.168 0 0 1.007-.322 3.296 1.229a11.464 11.464 0 013.003-.404c1.018 0 2.042.138 3.003.404 2.29-1.551 3.296-1.229 3.296-1.229.653 1.648.242 2.865.118 3.168.77.836 1.236 1.909 1.236 3.22 0 4.607-2.807 5.62-5.473 5.923.431.373.817 1.104.817 2.223 0 1.606-.014 2.898-.017 3.292 0 .318.19.694.798.577A12.001 12.001 0 0024 12.297c0-6.627-5.373-12-12-12z" />
                   </svg>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a
+                  href="https://www.instagram.com/yourprofile"
+                  className="text-gray-400 hover:text-white"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg
                     className="h-6 w-6"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M22.673 0h-21.346c-.732 0-1.327.595-1.327 1.327v21.346c0 .732.595 1.327 1.327 1.327h21.346c.732 0 1.327-.595 1.327-1.327v-21.346c0-.732-.595-1.327-1.327-1.327zm-6.007 21.421h-3.804v-9.468c0-2.255-.045-5.153-3.143-5.153-3.148 0-3.624 2.457-3.624 5v9.622h-3.804v-19.001h3.645v2.590h.052c.506-.959 1.748-1.971 3.599-1.971 3.845 0 4.558 2.530 4.558 5.823v12.016zm-11.133-20.571a2.172 2.172 0 1 1 0-4.343 2.172 2.172 0 0 1 0 4.343z" />
+                    <path d="M12 0c-6.627 0-12 5.373-12 12 0 6.627 5.373 12 12 12 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12zm6 15.383c0 1.453-.048 2.726-.174 4.031-.095 1.032-.321 1.793-1.122 2.407-1.07.872-2.017.722-2.99.722-3.958 0-8.072-.025-12.052 0-1.474.017-2.233-1.05-2.233-2.055v-11.07c0-1.006.755-2.054 2.233-2.055h12.052c1.002 0 2.055.751 2.055 2.055v11.07zm-6-7.383c-3.035 0-5.484 2.419-5.484 5.481 0 3.036 2.449 5.484 5.484 5.484 3.035 0 5.484-2.448 5.484-5.484 0-3.062-2.449-5.481-5.484-5.481zm0 8.699c-1.775 0-3.217-1.443-3.217-3.217 0-1.776 1.442-3.217 3.217-3.217 1.774 0 3.217 1.441 3.217 3.217 0 1.774-1.443 3.217-3.217 3.217zm5.238-9.8c-.643 0-1.191-.519-1.191-1.174 0-.645.548-1.174 1.191-1.174s1.175.529 1.175 1.174c0 .655-.532 1.174-1.175 1.174z" />
                   </svg>
                 </a>
                 <a href="#" className="text-gray-400 hover:text-white">
@@ -204,8 +225,8 @@ export default function Navbar() {
           </div>
           <div className="text-center mt-4">
             <p className="text-gray-400 text-sm">
-              &copy; {new Date().getFullYear()} Tu Empresa. Todos los derechos
-              reservados.
+              &copy; {new Date().getFullYear()} Your Company. All rights
+              reserved.
             </p>
           </div>
         </div>
