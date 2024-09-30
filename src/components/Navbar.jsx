@@ -22,12 +22,15 @@ export default function Navbar() {
     <nav className="bg-[#312e31] fixed w-screen h-[10vh] z-50 top-0">
       <div className="mx-auto h-full max-w-7xl px-2 sm:px-6 lg:px-2 ">
         <div className="relative flex h-full items-center justify-evenly ">
-          <h2 className="text-3xl font-bold w-full text-center sm:text-start sm:text-5xl Sketchnote">
+          <Link
+            className="text-3xl font-bold w-full text-center sm:text-start sm:text-5xl Sketchnote"
+            to="/"
+          >
             Event
             <span className="text-4xl font-extrabold text-yellow-500 shadow-lg transform hover:scale-110 transition-transform duration-300">
               Hub
             </span>
-          </h2>
+          </Link>
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             <button
               onClick={() => setOpen(!open)}

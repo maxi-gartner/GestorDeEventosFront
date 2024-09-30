@@ -5,6 +5,8 @@ import SignUp from "../pages/SignUp.jsx";
 import SignIn from "../pages/SignIn.jsx";
 import Events from "../pages/Events.jsx";
 import DetailsEvent from "../pages/DetailsEvent.jsx";
+import AboutUs from "../pages/AboutUs.jsx";
+import Contact from "../pages/Contact.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,8 @@ const router = createBrowserRouter([
       { path: "/signin", element: <SignIn /> },
       { path: "/events", element: <Events /> },
       { path: "/event/:id", element: <DetailsEvent /> },
+      { path: "/about", element: <AboutUs /> },
+      { path: "/contact", element: <Contact /> },
     ],
   },
 ]);
