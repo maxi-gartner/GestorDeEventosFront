@@ -1,16 +1,8 @@
-const navigation = [
-  { name: "Home", href: "#", current: true },
-  { name: "SignUp", href: "#", current: false },
-  { name: "SignIn", href: "#", current: false },
-  { name: "EventS", href: "#", current: false },
-  { name: "About Us", href: "#", current: false },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function Sidebar({ open, setOpen }) {
+function Sidebar({ open, setOpen, navigation }) {
   return (
     <div
       className={`${open ? "block" : "hidden"} sm:hidden h-screen`}

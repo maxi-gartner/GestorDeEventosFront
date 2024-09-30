@@ -19,6 +19,7 @@ export default function Events() {
   const filteredEvents = events.filter((event) =>
     event.name.toLowerCase().includes(filter.toLowerCase())
   );
+  console.log("filteredEvents", filteredEvents);
 
   return (
     <div>
@@ -27,29 +28,24 @@ export default function Events() {
         placeholder="Search events by name..."
         value={filter}
         onChange={handleFilterChange}
-        className="w-full p-2 mb-5"
+        className="w-full p-2 mb-5 mt-2 rounded-md"
       />
       <div>
         {filteredEvents.length > 0 ? (
           filteredEvents.map((event, index) => (
-            <div
+            <a
+              href={`/event/${event.id}`}
               key={index}
-              style={{
-                border: "1px solid #ddd",
-                padding: "10px",
-                marginBottom: "10px",
-              }}
+              className="mb-4 flex flex-col gap-1 py-2 border-t border-white "
             >
+              <h2 className="text-lg font-semibold mb-2 w-full text-center">
+                {event.name}
+              </h2>
               <img
                 src={event.photo}
                 alt={event.name}
-                style={{
-                  width: "100%",
-                  maxHeight: "200px",
-                  objectFit: "cover",
-                }}
+                className="w-full max-h-[200px] object-cover"
               />
-              <h2>{event.name}</h2>
               <p>{event.description}</p>
               <p>
                 <strong>Date:</strong>{" "}
@@ -58,10 +54,10 @@ export default function Events() {
               <p>
                 <strong>Minimum Age:</strong> {event.minimumAge}
               </p>
-            </div>
+            </a>
           ))
         ) : (
-          <p>No se encontraron eventos.</p>
+          <p>No events found.</p>
         )}
       </div>
     </div>
