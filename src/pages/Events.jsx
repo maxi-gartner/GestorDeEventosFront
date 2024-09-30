@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import eventQueries from "../services/eventQueries";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/event")
-      .then((res) => res.json())
-      .then((data) => setEvents(data.response.map((event) => event.data)))
-      .catch((err) => console.log(err));
+    eventQueries.getAllEvents().then(setEvents);
   }, []);
-  console.log("events", events);
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
@@ -22,34 +20,35 @@ export default function Events() {
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search events by name..."
-        value={filter}
-        onChange={handleFilterChange}
-        className="w-full p-2 mb-5"
-      />
-      <div>
+      <div className="flex justify-center">
+        <input
+          type="text"
+          placeholder="Search events by name..."
+          value={filter}
+          onChange={handleFilterChange}
+          className="sm:w-[50%] p-2 mb-5 mt-2 rounded-md min-w-80"
+        />
+      </div>
+      <div className="flex flex-wrap justify-center gap-4">
         {filteredEvents.length > 0 ? (
           filteredEvents.map((event, index) => (
-            <div
+            <Link
+              to={`/event/${event.id}`}
               key={index}
-              style={{
-                border: "1px solid #ddd",
-                padding: "10px",
-                marginBottom: "10px",
-              }}
+              className="mb-4 flex flex-col gap-1 py-2 border-t border-white sm:w-96"
             >
+              <h2 className="text-lg font-semibold mb-2 w-full text-center">
+                {event.name}
+              </h2>
               <img
                 src={event.photo}
                 alt={event.name}
-                style={{
-                  width: "100%",
-                  maxHeight: "200px",
-                  objectFit: "cover",
-                }}
+                className="w-full max-h-[200px] object-cover sm:h-60"
+                onError={(e) =>
+                  (e.target.src =
+                    "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")
+                }
               />
-              <h2>{event.name}</h2>
               <p>{event.description}</p>
               <p>
                 <strong>Date:</strong>{" "}
@@ -58,10 +57,10 @@ export default function Events() {
               <p>
                 <strong>Minimum Age:</strong> {event.minimumAge}
               </p>
-            </div>
+            </Link>
           ))
         ) : (
-          <p>No se encontraron eventos.</p>
+          <p>No events found.</p>
         )}
       </div>
     </div>
