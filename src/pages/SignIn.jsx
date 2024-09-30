@@ -1,39 +1,21 @@
 import { useNavigate } from "react-router-dom";
+import authQueries from "../services/authQueries";
+import { Link } from "react-router-dom";
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const handleLogin = (event) => {
-    event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
     const body = { email, password };
-
-    fetch("http://localhost:4000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      //.then((data) => console.log("data", data))
-      .then((data) => {
-        if (data.response.data.role !== "user") {
-          const expirationTime = new Date().getTime() + 60 * 60 * 1000;
-          localStorage.setItem("user", JSON.stringify(data.response.data));
-          localStorage.setItem("token", JSON.stringify(data.response.token));
-          localStorage.setItem("AdminOrOrganizerExpiration", expirationTime);
-
-          navigate("/");
-        } else {
-          localStorage.setItem("user", JSON.stringify(data.response.data));
-          localStorage.setItem("token", JSON.stringify(data.response.token));
-          navigate("/");
-        }
-      })
-      .catch((err) => console.log(err));
+    authQueries.signin(body).then((data) => {
+      const expirationTime = new Date().getTime() + 60 * 60 * 1000;
+      localStorage.setItem("user", JSON.stringify(data.response.data));
+      localStorage.setItem("token", JSON.stringify(data.response.token));
+      localStorage.setItem("AdminOrOrganizerExpiration", expirationTime);
+      navigate("/");
+    });
   };
 
   const userData = localStorage.getItem("user");
@@ -165,12 +147,12 @@ export default function SignIn() {
               <div className="min-w-[270px]">
                 <div className="mt-4 text-center">
                   New user?{" "}
-                  <a
+                  <Link
                     className="text-blue-500 underline hover:text-blue-600"
-                    href="/signup"
+                    to="/signup"
                   >
                     Create account here
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
