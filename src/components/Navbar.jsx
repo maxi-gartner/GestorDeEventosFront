@@ -19,7 +19,7 @@ export default function Navbar() {
   return (
     <nav className="bg-[#312e31] fixed w-screen h-[10vh] z-50 top-0">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-center font-sketchnote">
+        <div className="relative flex h-16 items-center justify-center ">
           <h2 className="text-3xl font-bold w-full text-center Sketchnote">
             Event
             <span className="text-4xl font-extrabold text-yellow-500 shadow-lg transform hover:scale-110 transition-transform duration-300">
