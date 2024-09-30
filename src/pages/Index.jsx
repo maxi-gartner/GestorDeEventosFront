@@ -12,7 +12,7 @@ export default function Index() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row w-full justify-center">
+      <div className="flex flex-col sm:flex-row w-screen justify-center">
         <div className="flex w-full justify-center h-full relative max-w-7xl">
           <img
             src="/Images/home.jpeg"
