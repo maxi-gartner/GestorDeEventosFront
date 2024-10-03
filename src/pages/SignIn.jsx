@@ -1,30 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import authQueries from "../services/authQueries";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/actions/userAction";
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleLogin = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     const body = { email, password };
     authQueries.signin(body).then((data) => {
-      const expirationTime = new Date().getTime() + 60 * 60 * 1000;
+      dispatch(login(data.response));
       localStorage.setItem("user", JSON.stringify(data.response.data));
       localStorage.setItem("token", JSON.stringify(data.response.token));
-      localStorage.setItem("AdminOrOrganizerExpiration", expirationTime);
       navigate("/");
     });
   };
-
-  const userData = localStorage.getItem("user");
-  console.log("userData", JSON.parse(userData));
-  console.log("token", localStorage.getItem("token"));
-  console.log(
-    "adminOrOrganizerExpiration",
-    localStorage.getItem("AdminOrOrganizerExpiration")
-  );
+  console.log("user", localStorage.getItem("user"));
 
   return (
     <div className="py-2 sm:py-20">

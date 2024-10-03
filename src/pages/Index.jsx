@@ -19,8 +19,7 @@ const dataBox = (events) => {
     }
   });
 
-  console.log("rating", rating);
-  const averageRating = rating / ratingCount;
+  const averageRating = ratingCount > 0 ? rating / ratingCount : 0;
 
   return {
     placesAvailable: occupancy - attendees,

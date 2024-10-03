@@ -7,6 +7,7 @@ export default function SignUp() {
 
   const handleRegister = async (event) => {
     event.preventDefault();
+
     const name = event.target.name.value;
     const lastname = event.target.lastname.value;
     const email = event.target.email.value;
@@ -16,30 +17,42 @@ export default function SignUp() {
     const genre = event.target.genre.value;
     const role = event.target.role.value;
 
-    console.log(
-      "object",
-      name,
-      lastname,
-      email,
-      password,
-      age,
-      genre,
-      confirmPassword
-    );
-
-    if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden");
+    if (
+      !name ||
+      !lastname ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !age ||
+      !genre ||
+      !role
+    ) {
+      alert("Todos los campos son obligatorios.");
       return;
     }
 
-    const body = { name, lastname, email, password, age, genre, role };
+    if (password !== confirmPassword) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
 
-    const data = await authQueries.signup(body);
-    const expirationTime = new Date().getTime() + 60 * 60 * 1000;
-    localStorage.setItem("user", JSON.stringify(data.response.data));
-    localStorage.setItem("token", JSON.stringify(data.response.token));
-    localStorage.setItem("AdminOrOrganizerExpiration", expirationTime);
-    navigate("/");
+    try {
+      const body = { name, lastname, email, password, age, genre, role };
+
+      console.log("Datos enviados:", body);
+
+      const response = await authQueries.signup(body);
+
+      if (response) {
+        alert("Registro exitoso");
+        navigate("/signin");
+      } else {
+        alert("Error en el registro. Por favor, intentá nuevamente.");
+      }
+    } catch (error) {
+      console.error("Error durante el registro:", error);
+      alert("Hubo un error durante el registro. Por favor, intentá más tarde.");
+    }
   };
 
   return (
