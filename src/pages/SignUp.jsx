@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import authQueries from "../services/authQueries";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -27,31 +28,47 @@ export default function SignUp() {
       !genre ||
       !role
     ) {
-      alert("Todos los campos son obligatorios.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "All fields are required",
+      });
       return;
     }
-
     if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Passwords do not match",
+      });
       return;
     }
-
     try {
       const body = { name, lastname, email, password, age, genre, role };
-
-      console.log("Datos enviados:", body);
-
       const response = await authQueries.signup(body);
-
-      if (response) {
-        alert("Registro exitoso");
-        navigate("/signin");
+      if (response.success === true) {
+        Swal.fire({
+          icon: "success",
+          title: response.message,
+          text: "Redirecting to login...",
+          timer: 1500,
+          willClose: () => {
+            navigate("/");
+          },
+        });
       } else {
-        alert("Error en el registro. Por favor, intentá nuevamente.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: response.data.message,
+        });
       }
     } catch (error) {
-      console.error("Error durante el registro:", error);
-      alert("Hubo un error durante el registro. Por favor, intentá más tarde.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response.data.message,
+      });
     }
   };
 

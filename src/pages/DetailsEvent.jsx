@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import eventQueries from "../services/eventQueries";
+import Swal from "sweetalert2";
 
 export default function DetailsEvent() {
   const { id } = useParams();
@@ -13,12 +14,29 @@ export default function DetailsEvent() {
   async function registerToEvent(id) {
     try {
       const response = await eventQueries.registerToEvent(id);
-      if (response.status === 200) {
-        alert("Registered successfully!");
+      console.log("response", response);
+      if (response.data.success === true) {
+        Swal.fire({
+          title: "Success",
+          text: response.data.message,
+          icon: "success",
+          confirmButtonText: "Confirm",
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: response.data.message,
+          icon: "error",
+          confirmButtonText: "Confirm",
+        });
       }
-    } catch (error) {
-      console.error(error);
-      alert(error.response.data.message);
+    } catch {
+      Swal.fire({
+        title: "Error",
+        text: "Error registering for event",
+        icon: "error",
+        confirmButtonText: "Confirm",
+      });
     }
   }
 

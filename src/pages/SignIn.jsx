@@ -3,6 +3,7 @@ import authQueries from "../services/authQueries";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/actions/userAction";
+import Swal from "sweetalert2";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -16,10 +17,29 @@ export default function SignIn() {
       dispatch(login(data.response));
       localStorage.setItem("user", JSON.stringify(data.response.data));
       localStorage.setItem("token", JSON.stringify(data.response.token));
-      navigate("/");
+
+      if (data.success === true) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500,
+          willClose: () => {
+            navigate("/");
+          },
+        });
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     });
   };
-  console.log("user", localStorage.getItem("user"));
 
   return (
     <div className="py-2 sm:py-20">

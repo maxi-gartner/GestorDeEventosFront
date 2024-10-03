@@ -22,7 +22,7 @@ export default function Navbar() {
       })
     );
   }
-  console.log(user);
+  //console.log(user);
 
   const navigation = [
     { name: "Home", href: "/", current: true },
