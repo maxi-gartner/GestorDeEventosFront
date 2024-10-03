@@ -10,13 +10,36 @@ export default function DetailsEvent() {
     eventQueries.getEvent(id).then(setEvent);
   }, [id]);
 
+  async function registerToEvent(id) {
+    try {
+      const response = await eventQueries.registerToEvent(id);
+      if (response.status === 200) {
+        alert("Registered successfully!");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.response.data.message);
+    }
+  }
+
   if (!event) {
     return <p>Cargando evento...</p>;
   }
 
   return (
     <div className="max-w-7xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center">{event.name}</h1>
+      <div className="flex flex-col justify-center items-center mb-6">
+        <h1 className="text-3xl font-bold text-center">{event.name}</h1>
+        <button
+          onClick={() => registerToEvent(event.id)}
+          className="text-black bg-yellow-500 hover:bg-yellow-700 hover:text-white font-bold py-2 px-4 rounded-3xl mt-4 relative group transform transition-transform duration-200"
+        >
+          <span className="flex items-center justify-between w-full">
+            <span>Register for the event</span>
+            <i className="fas fa-hand-pointer fa-lg transform group-hover:scale-125 text-white ml-4 -rotate-45"></i>
+          </span>
+        </button>
+      </div>
 
       {/* Event Photo */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
