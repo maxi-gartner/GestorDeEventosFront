@@ -40,6 +40,18 @@ const eventQueries = {
       return err.response;
     }
   },
+
+  async isRegistered(id) {
+    try {
+      const response = await apiEvents.get(`registered/${id}`, { headers });
+
+      //console.log("response", response);
+      return response.data.isRegistered;
+    } catch /* (err)  */ {
+      //console.log("error in catch query", err);
+      return false;
+    }
+  },
 };
 
 export default eventQueries;

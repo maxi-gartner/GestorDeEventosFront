@@ -43,7 +43,7 @@ export default function Events() {
               <img
                 src={event.photo}
                 alt={event.name}
-                className="w-full max-h-[200px] object-cover sm:h-60"
+                className="w-full max-h-[200px] object-cover sm:h-60 hover:shadow-xl hover:shadow-black/30"
                 onError={(e) =>
                   (e.target.src =
                     "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")

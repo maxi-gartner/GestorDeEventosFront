@@ -53,7 +53,7 @@ export default function SignUp() {
           text: "Redirecting to login...",
           timer: 1500,
           willClose: () => {
-            navigate("/");
+            navigate("/signin");
           },
         });
       } else {

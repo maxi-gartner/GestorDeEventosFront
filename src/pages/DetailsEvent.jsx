@@ -6,9 +6,13 @@ import Swal from "sweetalert2";
 export default function DetailsEvent() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
+  const [isRegistered, setIsRegistered] = useState(false);
+  //console.log("event", event);
+  console.log("isRegistered", isRegistered);
 
   useEffect(() => {
     eventQueries.getEvent(id).then(setEvent);
+    eventQueries.isRegistered(id).then(setIsRegistered);
   }, [id]);
 
   async function registerToEvent(id) {
@@ -21,6 +25,9 @@ export default function DetailsEvent() {
           text: response.data.message,
           icon: "success",
           confirmButtonText: "Confirm",
+          willClose: () => {
+            setIsRegistered(true);
+          },
         });
       } else {
         Swal.fire({
@@ -50,11 +57,26 @@ export default function DetailsEvent() {
         <h1 className="text-3xl font-bold text-center">{event.name}</h1>
         <button
           onClick={() => registerToEvent(event.id)}
-          className="text-black bg-yellow-500 hover:bg-yellow-700 hover:text-white font-bold py-2 px-4 rounded-3xl mt-4 relative group transform transition-transform duration-200"
+          {...(isRegistered && { disabled: true })}
+          className={`text-black font-bold py-2 px-4 rounded-3xl mt-4 relative  ${
+            isRegistered
+              ? "bg-green-500"
+              : "bg-blue-500 hover:bg-blue-700 hover:text-white group transform transition-transform duration-200"
+          } `}
         >
           <span className="flex items-center justify-between w-full">
-            <span>Register for the event</span>
-            <i className="fas fa-hand-pointer fa-lg transform group-hover:scale-125 text-white ml-4 -rotate-45"></i>
+            <span>
+              {isRegistered
+                ? "You are already registered for this event"
+                : "Register for the event"}
+            </span>
+            {isRegistered ? (
+              <span className="text-lg transform group-hover:scale-125 ml-2">
+                🥳
+              </span>
+            ) : (
+              <i className="fas fa-hand-pointer fa-lg transform group-hover:scale-125 text-white ml-4 -rotate-45"></i>
+            )}
           </span>
         </button>
       </div>
