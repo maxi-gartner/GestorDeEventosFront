@@ -13,7 +13,8 @@ const authQueries = {
 
       return response.data;
     } catch (err) {
-      return err.response;
+      console.log("err.response", err.response.data);
+      return err.response.data;
     }
   },
 

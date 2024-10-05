@@ -14,6 +14,17 @@ export default function SignIn() {
     const password = e.target.password.value;
     const body = { email, password };
     authQueries.signin(body).then((data) => {
+      if (data.success === false) {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      }
+      console.log("data", data);
       dispatch(savedUserLogin(data.response));
       localStorage.setItem("token", JSON.stringify(data.response.token));
 
