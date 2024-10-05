@@ -2,27 +2,34 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useDispatch } from "react-redux";
-import { login, logout } from "../redux/actions/userAction";
-//const URL = import.meta.env.DATABASE_URL;
-//console.log("La URL de la base de datos es:", URL);
+import { savedUserLogin, logout } from "../redux/actions/userAction";
+import authQueries from "../services/authQueries.js";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+
+const token = localStorage.getItem("token");
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const user = useSelector((state) => state.user.userData);
 
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user")) || null;
-  if (user) {
-    dispatch(
-      login({
-        user: user,
-        token: token,
+  if (token && JSON.stringify(user) === "{}") {
+    authQueries
+      .loginWithToken()
+      .then((data) => {
+        dispatch(savedUserLogin(data.response));
       })
-    );
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.response.data.message,
+        });
+      });
   }
-  //console.log(user);
 
   const navigation = [
     { name: "Home", href: "/", current: true },

@@ -1,18 +1,14 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { login, logout } from "../actions/userAction";
+import { savedUserLogin, logout } from "../actions/userAction";
 
 const initialStore = {
   userData: {},
-  token: null,
 };
 
 const userReducer = createReducer(initialStore, (builder) => {
   builder
-    .addCase(login, (state, action) => {
-      //console.log("payload", action.payload);
-      state.userData = action.payload.user;
-      state.token = action.payload.token;
-      return state;
+    .addCase(savedUserLogin, (state, action) => {
+      state.userData = action.payload.data;
     })
     .addCase(logout, () => {
       return initialStore;
