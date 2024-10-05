@@ -153,7 +153,7 @@ export default function Navbar() {
                   {isOpen && (
                     <div className="absolute right-0 rounded-md bg-[#312e31] text-gray-300 text-lg sm:text-lg font-medium">
                       <Link
-                        to="/profile"
+                        to={`/userControlPanel/${user.email}`}
                         className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md"
                         role="menuitem"
                       >
