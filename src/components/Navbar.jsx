@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useDispatch } from "react-redux";
@@ -14,9 +14,12 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [viewUser, setViewUser] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state) => state.user.userData);
   const events = useSelector((state) => state.events.eventsData);
+  console.log("user", user);
+  console.log("viewUser", viewUser);
 
   //CAPTUDADOR AUTOMATICO DE USUARIOS
   if (token && JSON.stringify(user) === "{}") {
@@ -40,6 +43,13 @@ export default function Navbar() {
         console.log(err);
       });
   }
+  //actualizar usuario
+  useEffect(() => {
+    if (JSON.stringify(user) !== "{}") {
+      console.log("Usuario actualizado");
+      setViewUser(true);
+    }
+  }, [user]);
 
   const navigation = [
     { name: "Home", href: "/", current: true },
@@ -137,7 +147,7 @@ export default function Navbar() {
                   {item.name}
                 </Link>
               ))}
-              {token && (
+              {viewUser ? (
                 <div className="relative">
                   {/* desplegable usuario */}
                   <section className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md py-2 text-lg sm:text-lg font-medium max-h-[5vh] flex items-center">
@@ -146,7 +156,7 @@ export default function Navbar() {
                       className="w-auto px-4s py-2 flex items-center whitespace-nowrap"
                     >
                       {/* nombre de usuario */}
-                      {user ? (
+                      {user.leght !== 0 ? (
                         `${capitalizeWords(user.name)}  ${capitalizeWords(
                           user.lastname
                         )}`
@@ -191,6 +201,8 @@ export default function Navbar() {
                     </div>
                   )}
                 </div>
+              ) : (
+                <></>
               )}
             </div>
           </div>
