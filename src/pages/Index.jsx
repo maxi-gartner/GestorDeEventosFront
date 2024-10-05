@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import eventQueries from "../services/eventQueries";
 import placesQueries from "../services/placesQueries";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const dataBox = (events) => {
   let attendees = 0;
@@ -32,22 +32,23 @@ export default function Index() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [places, setPlaces] = useState([]);
+  const data = useSelector((state) => state.events.eventsData);
 
   useEffect(() => {
-    eventQueries.getAllEvents().then(setEvents);
+    if (JSON.stringify(data) !== "{}") {
+      setEvents(data);
+    }
+  }, [data]);
+  useEffect(() => {
     placesQueries.getAllPlaces().then(setPlaces);
   }, []);
+
   let now = new Date();
-
   let upcomingEvents = events.filter((event) => new Date(event.date) > now);
-
   let sortedPastEvents = upcomingEvents.sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
-
   let nearbyEvents = sortedPastEvents.slice(0, 2);
-  //console.log("places", places);
-  //console.log("dataBox1", dataBox(events));
 
   return (
     <div className="flex flex-col items-center">

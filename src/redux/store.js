@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./reducers/userReducer";
-//import eventReducer from "./reducers/eventReducer";
+import eventsReducer from "./reducers/eventsReducer";
 
 const options = {
   reducer: {
     user: userReducer,
-    //events: eventReducer,
+    events: eventsReducer,
   },
 };
 

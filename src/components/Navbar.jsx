@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import { savedUserLogin, logout } from "../redux/actions/userAction";
 import authQueries from "../services/authQueries.js";
 import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
+import eventQueries from "../services/eventQueries.js";
+import { savedEvents } from "../redux/actions/eventsAction";
 
 const token = localStorage.getItem("token");
 
@@ -15,7 +16,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state) => state.user.userData);
+  const events = useSelector((state) => state.events.eventsData);
 
+  //CAPTUDADOR AUTOMATICO DE USUARIOS
   if (token && JSON.stringify(user) === "{}") {
     authQueries
       .loginWithToken()
@@ -23,11 +26,18 @@ export default function Navbar() {
         dispatch(savedUserLogin(data.response));
       })
       .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: err.response.data.message,
-        });
+        console.log(err);
+      });
+  }
+  //CAPTUDADOR AUTOMATICO DE EVENTOS
+  if (JSON.stringify(events) === "{}") {
+    eventQueries
+      .getAllEvents()
+      .then((data) => {
+        dispatch(savedEvents(data));
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 

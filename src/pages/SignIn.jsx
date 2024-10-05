@@ -25,7 +25,7 @@ export default function SignIn() {
           showConfirmButton: false,
           timer: 1500,
           willClose: () => {
-            navigate("/signin");
+            navigate("/");
           },
         });
       } else {
