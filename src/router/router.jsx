@@ -7,6 +7,7 @@ import Events from "../pages/Events.jsx";
 import DetailsEvent from "../pages/DetailsEvent.jsx";
 import AboutUs from "../pages/AboutUs.jsx";
 import Contact from "../pages/Contact.jsx";
+import UserControlPanel from "../pages/UserControlPanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: "/event/:id", element: <DetailsEvent /> },
       { path: "/about", element: <AboutUs /> },
       { path: "/contact", element: <Contact /> },
+      { path: "/userControlPanel/:email", element: <UserControlPanel /> },
     ],
   },
 ]);

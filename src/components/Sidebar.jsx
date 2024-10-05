@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -5,13 +7,14 @@ function classNames(...classes) {
 function Sidebar({ open, setOpen, navigation }) {
   return (
     <div
-      className={`${open ? "block" : "hidden"} sm:hidden h-screen`}
+      className={`${open ? "block" : "hidden"} lg:hidden h-screen`}
       onClick={() => setOpen(!open)}
     >
-      <div className="space-y-1 px-2 pb-3 pt-2 bg-[#312e31]">
+      <div className="space-y-1 px-2 pb-3 pt-2 bg-[#312e31] sm:max-w-sm sm:rounded-none sm:rounded-br-lg sm:rounded-bl">
         {navigation.map((item) => (
-          <a
+          <Link
             key={item.name}
+            to={item.name}
             href={item.href}
             aria-current={item.current ? "page" : undefined}
             className={classNames(
@@ -22,7 +25,7 @@ function Sidebar({ open, setOpen, navigation }) {
             )}
           >
             {item.name}
-          </a>
+          </Link>
         ))}
       </div>
     </div>

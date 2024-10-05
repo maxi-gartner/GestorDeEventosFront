@@ -1,30 +1,45 @@
 import { useNavigate } from "react-router-dom";
 import authQueries from "../services/authQueries";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/actions/userAction";
+import Swal from "sweetalert2";
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleLogin = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     const body = { email, password };
     authQueries.signin(body).then((data) => {
-      const expirationTime = new Date().getTime() + 60 * 60 * 1000;
+      dispatch(login(data.response));
       localStorage.setItem("user", JSON.stringify(data.response.data));
       localStorage.setItem("token", JSON.stringify(data.response.token));
-      localStorage.setItem("AdminOrOrganizerExpiration", expirationTime);
-      navigate("/");
+
+      if (data.success === true) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500,
+          willClose: () => {
+            navigate("/");
+          },
+        });
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     });
   };
-
-  const userData = localStorage.getItem("user");
-  console.log("userData", JSON.parse(userData));
-  console.log("token", localStorage.getItem("token"));
-  console.log(
-    "adminOrOrganizerExpiration",
-    localStorage.getItem("AdminOrOrganizerExpiration")
-  );
 
   return (
     <div className="py-2 sm:py-20">
