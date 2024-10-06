@@ -1,12 +1,4 @@
 import axios from "axios";
-
-// Intenta obtener el token del localStorage
-const token = localStorage.getItem("token");
-const sanitizedToken = token ? token.replace(/"/g, "") : null; // Verifica si el token no es null
-const headers = {
-  Authorization: `Bearer ${sanitizedToken}`, // Usa el token saneado
-};
-
 const apiEvents = axios.create({
   baseURL: "http://localhost:4000/api/event/",
 });
@@ -33,6 +25,11 @@ const eventQueries = {
 
   async registerToEvent(id) {
     try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null; // Verifica si el token no es null
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`, // Usa el token saneado
+      };
       const response = await apiEvents.post(`register/${id}`, {}, { headers });
       return response;
     } catch (err) {
@@ -43,6 +40,11 @@ const eventQueries = {
 
   async unsubscribe(id) {
     try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null; // Verifica si el token no es null
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`, // Usa el token saneado
+      };
       const response = await apiEvents.post(
         `unsubscribe/${id}`,
         {},
@@ -57,6 +59,11 @@ const eventQueries = {
 
   async isRegistered(id) {
     try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null; // Verifica si el token no es null
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`, // Usa el token saneado
+      };
       const response = await apiEvents.get(`registered/${id}`, { headers });
 
       //console.log("response", response);
