@@ -21,7 +21,7 @@ const router = createBrowserRouter([
       { path: "/event/:id", element: <DetailsEvent /> },
       { path: "/about", element: <AboutUs /> },
       { path: "/contact", element: <Contact /> },
-      { path: "/userControlPanel/:email", element: <UserControlPanel /> },
+      { path: "/userControlPanel", element: <UserControlPanel /> },
     ],
   },
 ]);

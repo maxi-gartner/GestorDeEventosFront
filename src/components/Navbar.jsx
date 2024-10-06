@@ -18,8 +18,6 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state) => state.user.userData);
   const events = useSelector((state) => state.events.eventsData);
-  console.log("user", user);
-  console.log("viewUser", viewUser);
 
   //CAPTUDADOR AUTOMATICO DE USUARIOS
   if (token && JSON.stringify(user) === "{}") {
@@ -46,7 +44,6 @@ export default function Navbar() {
   //actualizar usuario
   useEffect(() => {
     if (JSON.stringify(user) !== "{}") {
-      console.log("Usuario actualizado");
       setViewUser(true);
     }
   }, [user]);
@@ -180,8 +177,8 @@ export default function Navbar() {
                   {isOpen && (
                     <div className="absolute right-0 rounded-md bg-[#312e31] text-gray-300 text-lg sm:text-lg font-medium">
                       <Link
-                        to={`/userControlPanel/${user.email}`}
-                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md"
+                        to={`/userControlPanel`}
+                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md  whitespace-nowrap"
                         role="menuitem"
                       >
                         User profile

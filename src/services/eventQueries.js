@@ -41,6 +41,20 @@ const eventQueries = {
     }
   },
 
+  async unsubscribe(id) {
+    try {
+      const response = await apiEvents.post(
+        `unsubscribe/${id}`,
+        {},
+        { headers }
+      );
+      return response;
+    } catch (err) {
+      console.log("error in catch query", err);
+      return err.response;
+    }
+  },
+
   async isRegistered(id) {
     try {
       const response = await apiEvents.get(`registered/${id}`, { headers });

@@ -44,10 +44,11 @@ const authQueries = {
 
   async getUserByEmail(email) {
     try {
-      const response = await axios.get(`${apiUrl}auth/${email}`);
+      const response = await axios.get(`${apiUrl}auth/${email}`, { headers });
       return response.data;
     } catch (err) {
-      return err.response;
+      console.log("err.response.data", err.response.data);
+      return err.response.data;
     }
   },
 };
