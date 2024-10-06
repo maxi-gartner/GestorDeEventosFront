@@ -51,6 +51,18 @@ const authQueries = {
       return err.response.data;
     }
   },
+
+  async updateUser(body) {
+    console.log("body", body);
+    try {
+      const response = await axios.put(`${apiUrl}auth/update`, body, {
+        headers,
+      });
+      return response;
+    } catch (err) {
+      return err.response;
+    }
+  },
 };
 
 export default authQueries;

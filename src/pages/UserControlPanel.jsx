@@ -4,8 +4,11 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import authQueries from "../services/authQueries";
 import eventQueries from "../services/eventQueries";
+import { useDispatch } from "react-redux";
+import { savedUserLogin } from "../redux/actions/userAction";
 
 const UserControlPanel = () => {
+  const dispatch = useDispatch();
   const userEmail = useSelector((state) => state.user.userData.email) || "";
 
   const [user, setUser] = useState({});
@@ -20,21 +23,37 @@ const UserControlPanel = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí enviarías los cambios al servidor
-    Swal.fire({
-      title: "User updated",
-      text: "The changes have been saved successfully.",
-      icon: "success",
-      confirmButtonText: "OK",
+
+    authQueries.updateUser(user.data).then((data) => {
+      if (data.data.success === false) {
+        Swal.fire({
+          title: "Error",
+          text: data.data.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
+      Swal.fire({
+        title: "Success",
+        text: "The changes have been saved successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+        willClose: () => {
+          setUser(data.data.response);
+          dispatch(savedUserLogin(data.data.response));
+        },
+      });
     });
   };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUser((prevUser) => ({
-      ...prevUser,
+      //prev trae el ultimo estado del x en  [x, y] = useState({x: 1, y: 2})
+      ...prevUser, //ago una copia del estado
       data: {
         ...prevUser.data,
-        [name]: value,
+        [name]: value, //aca busco la kay y le remplazo el valor
       },
     }));
   };
@@ -43,7 +62,6 @@ const UserControlPanel = () => {
     eventQueries
       .unsubscribe(eventId)
       .then((data) => {
-        console.log("data", data.data.response.data);
         if (data.data.success === false) {
           Swal.fire({
             title: "Error",
@@ -70,7 +88,14 @@ const UserControlPanel = () => {
         });
       });
   }
-
+  const capitalizeWords = (str) => {
+    if (!str) return ""; // Manejo de cadena vacía o undefined
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
   return (
     <div className="container mx-auto p-6">
       {/* Sección de perfil */}
@@ -95,29 +120,47 @@ const UserControlPanel = () => {
             />
           )}
           <div>
-            <p className="text-xl font-semibold">{user.data?.name || ""}</p>
+            <p className="text-xl font-semibold">
+              {user.data ? (
+                `${capitalizeWords(user.data.name)}  ${capitalizeWords(
+                  user.data.lastname
+                )}`
+              ) : (
+                <></>
+              )}
+            </p>
             <p className="text-gray-500">{user.data?.email || ""}</p>
           </div>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700">Nombre</label>
+            <label className="block text-gray-300">Name</label>
             <input
               type="text"
               name="name"
               value={user.data?.name || ""}
-              onChange={handleInputChange} // Agregar onChange
+              onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-300">Last Name</label>
+            <input
+              type="text"
+              name="lastname"
+              value={user.data?.lastname || ""}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-300">Email</label>
             <input
               type="email"
               name="email"
               value={user.data?.email || ""}
-              onChange={handleInputChange} // Agregar onChange
-              className="w-full p-2 border border-gray-300 rounded-md"
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded-md text-gray-300"
             />
           </div>
           <button
@@ -141,9 +184,20 @@ const UserControlPanel = () => {
                 key={event._id}
                 className="flex justify-between items-center mb-4 p-4 border-b border-gray-200"
               >
-                <div>
-                  <p className="text-lg font-semibold">{event.name}</p>
-                  <p className="text-gray-500">{event.date}</p>
+                <div className="flex items-center">
+                  {event.photo && (
+                    <img
+                      src={event.photo}
+                      alt={event.name}
+                      className="w-16 h-16 rounded-md mr-4 object-cover"
+                    />
+                  )}
+                  <div>
+                    <p className="text-lg font-semibold">{event.name}</p>
+                    <p className="text-gray-500">
+                      {new Date(event.date).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
                 <button
                   className="text-red-500 hover:text-red-700"
