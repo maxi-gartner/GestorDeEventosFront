@@ -10,7 +10,6 @@ const AdminPanel = () => {
 
   const [users, setUsers] = useState({});
   const [places, setPlaces] = useState([]);
-  console.log("user", users);
 
   useEffect(() => {
     if (userEmail) {
@@ -52,18 +51,24 @@ const AdminPanel = () => {
       {/* Sección de perfil */}
       <div className="shadow-md rounded-lg p-6">
         <h2 className="text-2xl font-bold mb-4">Users management</h2>
+        <button
+          className="bg-green-500 text-black font-semibold py-2 px-4 rounded hover:bg-green-700 transition duration-200 ease-in-out"
+          onClick={() => handleDelete(event._id)}
+        >
+          Register a new user
+        </button>
         {users.length > 0 ? (
           <ul>
             {users.map((user) => (
               <li
-                key={user.email}
+                key={user.data.email}
                 className="flex justify-between items-center mb-4 p-4 border-b border-gray-200"
               >
                 <div className="flex items-center">
-                  {user.photo && (
+                  {user.data.photo && (
                     <img
-                      src={user.photo}
-                      alt={user.name}
+                      src={user.data.photo}
+                      alt={user.data.name}
                       className="w-16 h-16 rounded-md mr-4 object-cover"
                     />
                   )}
@@ -100,6 +105,12 @@ const AdminPanel = () => {
       {/* Sección de eventos */}
       <div className="shadow-md rounded-lg p-6">
         <h2 className="text-2xl font-bold mb-4">Event management</h2>
+        <button
+          className="bg-green-500 text-black font-semibold py-2 px-4 rounded hover:bg-green-700 transition duration-200 ease-in-out"
+          onClick={() => handleDelete(event._id)}
+        >
+          Register a new event
+        </button>
         {events.length > 0 ? (
           <ul>
             {events.map((event) => (
@@ -147,6 +158,12 @@ const AdminPanel = () => {
       {/* Sección de eventos */}
       <div className="shadow-md rounded-lg p-6">
         <h2 className="text-2xl font-bold mb-4">Places management</h2>
+        <button
+          className="bg-green-500 text-black font-semibold py-2 px-4 rounded hover:bg-green-700 transition duration-200 ease-in-out"
+          onClick={() => handleDelete(event._id)}
+        >
+          Register a new places
+        </button>
         {places.length > 0 ? (
           <ul>
             {places.map((place) => (

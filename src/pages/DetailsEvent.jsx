@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 export default function DetailsEvent() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
+  console.log("event", event);
   const [isRegistered, setIsRegistered] = useState(false);
   //console.log("event", event);
   console.log("isRegistered", isRegistered);

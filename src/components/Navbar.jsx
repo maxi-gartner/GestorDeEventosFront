@@ -66,6 +66,10 @@ export default function Navbar() {
     return classes.filter(Boolean).join(" ");
   }
 
+  const handleLinkClick = () => {
+    setIsOpen(false); // Esto cierra el menú
+  };
+
   const capitalizeWords = (str) => {
     if (!str) return ""; // Manejo de cadena vacía o undefined
     return str
@@ -175,22 +179,46 @@ export default function Navbar() {
                     </button>
                   </section>
                   {isOpen && (
-                    <div className="absolute right-0 rounded-md bg-[#312e31] text-gray-300 text-lg sm:text-lg font-medium">
+                    <div className="absolute right-0 rounded-md bg-[#312e31] text-gray-300 text-lg sm:text-lg font-medium z-20">
+                      <div
+                        className="fixed left-0 top-0 w-screen h-screen z-10"
+                        onClick={handleLinkClick}
+                      ></div>
+
+                      {/* Menú desplegable */}
                       <Link
                         to={`/userControlPanel`}
-                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md  whitespace-nowrap"
+                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
                         role="menuitem"
+                        onClick={handleLinkClick}
                       >
                         User profile
                       </Link>
                       <Link
+                        to={`/adminPanel`}
+                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
+                        role="menuitem"
+                        onClick={handleLinkClick}
+                      >
+                        Admin Panel
+                      </Link>
+                      <Link
+                        to={`/organizerPanel`}
+                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
+                        role="menuitem"
+                        onClick={handleLinkClick}
+                      >
+                        Organizer Panel
+                      </Link>
+                      <Link
                         key="logout"
                         to="/"
-                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md"
+                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md z-20 relative"
                         onClick={() => {
                           localStorage.clear();
                           dispatch(logout());
                           navigate("/");
+                          handleLinkClick();
                         }}
                       >
                         LogOut

@@ -73,6 +73,23 @@ const eventQueries = {
       return false;
     }
   },
+
+  async createEvent(body) {
+    try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await apiEvents.post(`create`, body, {
+        headers,
+      });
+      return response.data;
+    } catch (err) {
+      console.log("error in catch query", err);
+      return err.response;
+    }
+  },
 };
 
 export default eventQueries;
