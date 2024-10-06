@@ -24,7 +24,6 @@ export default function SignIn() {
         });
         return;
       }
-      console.log("data", data);
       dispatch(savedUserLogin(data.response));
       localStorage.setItem("token", JSON.stringify(data.response.token));
 
