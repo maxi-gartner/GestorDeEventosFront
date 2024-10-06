@@ -3,6 +3,8 @@ import eventQueries from "../services/eventQueries";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import placesQueries from "../services/placesQueries";
 
 export default function RegisterEvent() {
   const navigate = useNavigate();
@@ -57,6 +59,15 @@ export default function RegisterEvent() {
     }
   };
 
+  const [places, setPlaces] = useState([]);
+  console.log("places", places);
+
+  useEffect(() => {
+    placesQueries.getAllPlaces().then((data) => {
+      setPlaces(data);
+    });
+  }, [user]);
+
   return (
     <div className="py-2 sm:py-20">
       <div className="flex h-full items-center justify-center">
@@ -76,13 +87,20 @@ export default function RegisterEvent() {
                     <label className="text-sm font-medium" htmlFor="place">
                       Place ID:
                     </label>
-                    <input
+                    <select
                       className="block w-full border bg-gray-50 border-gray-300 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm rounded-lg text-black"
                       id="place"
-                      type="text"
                       name="place"
                       required
-                    />
+                    >
+                      <option value="">Select a place</option>
+                      {places.map((place) => (
+                        <option key={place.data.id} value={place.data.id}>
+                          {place.data.name}
+                          {", "} {place.data.address}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div>
@@ -148,6 +166,7 @@ export default function RegisterEvent() {
                       id="photo"
                       type="text"
                       name="photo"
+                      placeholder="https://example.com/image.jpg"
                       required
                     />
                   </div>

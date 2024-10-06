@@ -88,6 +88,10 @@ export default function DetailsEvent() {
           src={event.photo}
           alt={event.name}
           className="w-full sm:w-1/2 max-h-96 object-cover rounded-lg"
+          onError={(e) =>
+            (e.target.src =
+              "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")
+          }
         />
         <div className="sm:w-1/2">
           <h2 className="text-2xl font-semibold mb-4">Event Details</h2>
@@ -112,6 +116,10 @@ export default function DetailsEvent() {
             src={event.place.photo}
             alt={event.place.name}
             className="w-full sm:w-1/2 max-h-96 object-cover rounded-lg"
+            onError={(e) =>
+              (e.target.src =
+                "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")
+            }
           />
           <div className="sm:w-1/2">
             <p className="mb-2">

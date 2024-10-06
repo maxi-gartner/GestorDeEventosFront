@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import authQueries from "../services/authQueries";
 import placesQueries from "../services/placesQueries";
+import { Link } from "react-router-dom";
 
 const AdminPanel = () => {
   const userEmail = useSelector((state) => state.user.userData.email) || "";
@@ -105,12 +106,12 @@ const AdminPanel = () => {
       {/* Sección de eventos */}
       <div className="shadow-md rounded-lg p-6">
         <h2 className="text-2xl font-bold mb-4">Event management</h2>
-        <button
+        <Link
           className="bg-green-500 text-black font-semibold py-2 px-4 rounded hover:bg-green-700 transition duration-200 ease-in-out"
-          onClick={() => handleDelete(event._id)}
+          to="/registerEvent"
         >
           Register a new event
-        </button>
+        </Link>
         {events.length > 0 ? (
           <ul>
             {events.map((event) => (
