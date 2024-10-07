@@ -8,10 +8,7 @@ export default function DetailsEvent() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [event, setEvent] = useState(null);
-  console.log("event", event);
   const [isRegistered, setIsRegistered] = useState(false);
-  //console.log("event", event);
-  console.log("isRegistered", isRegistered);
 
   useEffect(() => {
     eventQueries.getEvent(id).then(setEvent);
@@ -21,7 +18,6 @@ export default function DetailsEvent() {
   async function registerToEvent(id) {
     try {
       const response = await eventQueries.registerToEvent(id);
-      console.log("response", response);
       if (response.data.success === true) {
         Swal.fire({
           title: "Success",

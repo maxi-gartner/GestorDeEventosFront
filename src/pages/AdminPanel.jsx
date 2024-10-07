@@ -97,7 +97,7 @@ const AdminPanel = () => {
               {users.map((user) => (
                 <li
                   key={user.data.email}
-                  className="flex justify-between items-center mb-4 p-4 border-b border-gray-200"
+                  className="flex justify-between items-center mb-4 p-4 border-b border-gray-200 flex-col sm:flex-row gap-3"
                 >
                   <div className="flex items-center">
                     {user.data.photo && (
@@ -119,15 +119,15 @@ const AdminPanel = () => {
                       <p className="text-gray-400">Role: {user.data.email}</p>
                     </div>
                   </div>
-                  <div>
+                  <div className="flex justify-between gap-6">
                     <button
-                      className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out mr-4"
+                      className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out w-24"
                       /* onClick={() => handleEdit(user.email)} */
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-200 ease-in-out"
+                      className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-200 ease-in-out w-24"
                       /* onClick={() => handleDelete(user.email)} */
                     >
                       Delete
@@ -160,7 +160,7 @@ const AdminPanel = () => {
               {events.map((event) => (
                 <li
                   key={event.id}
-                  className="flex justify-between items-center mb-4 p-4 border-b border-gray-200"
+                  className="flex justify-between items-center mb-4 p-4 border-b border-gray-200 flex-col sm:flex-row gap-3"
                 >
                   <div className="flex items-center">
                     {event.photo && (
@@ -181,16 +181,16 @@ const AdminPanel = () => {
                       </p>
                     </div>
                   </div>
-                  <div>
+                  <div className="flex justify-between gap-6">
                     <button
-                      className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out mr-4"
-                      /* onClick={() => handleEdit(event._id)} */
+                      className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out w-24"
+                      /* onClick={() => handleEdit(user.email)} */
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-200 ease-in-out"
-                      /* onClick={() => handleDelete(event._id)} */
+                      className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-200 ease-in-out w-24"
+                      /* onClick={() => handleDelete(user.email)} */
                     >
                       Delete
                     </button>
@@ -222,7 +222,7 @@ const AdminPanel = () => {
               {places.map((place) => (
                 <li
                   key={place.data.id}
-                  className="flex justify-between items-center mb-4 p-4 border-b border-gray-200"
+                  className="flex justify-between items-center mb-4 p-4 border-b border-gray-200 flex-col sm:flex-row gap-3"
                 >
                   <div className="flex items-center">
                     {place.data.photo && (
@@ -250,16 +250,16 @@ const AdminPanel = () => {
                       </p>
                     </div>
                   </div>
-                  <div>
+                  <div className="flex justify-between gap-6">
                     <button
-                      className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out mr-4"
-                      /* onClick={() => handleEdit(place.data.id)} */
+                      className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out w-24"
+                      /* onClick={() => handleEdit(user.email)} */
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-200 ease-in-out"
-                      /* onClick={() => handleDelete(place.data.id)} */
+                      className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-200 ease-in-out w-24"
+                      /* onClick={() => handleDelete(user.email)} */
                     >
                       Delete
                     </button>

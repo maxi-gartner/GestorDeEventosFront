@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import placesQueries from "../services/placesQueries";
-import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function RegisterPlace({
@@ -153,15 +152,6 @@ export default function RegisterPlace({
                         Register Place
                       </span>
                     </button>
-                  </div>
-
-                  <div className="flex justify-center mt-4">
-                    <Link
-                      to="/places"
-                      className="text-sky-600 hover:underline text-sm"
-                    >
-                      Back to Places
-                    </Link>
                   </div>
                 </div>
               </form>

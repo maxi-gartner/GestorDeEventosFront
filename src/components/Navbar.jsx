@@ -1,22 +1,33 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { logout } from "../redux/actions/userAction";
 
-const token = localStorage.getItem("token");
-
 export default function Navbar() {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const role = useSelector((state) => state.user.userData.role) || "";
   const user = useSelector((state) => state.user.userData);
   const navigation = [
-    { name: "Home", href: "/", current: true },
-    { name: "EventS", href: "/events", current: false },
-    { name: "About Us", href: "/about", current: false },
-    { name: "Contact", href: "/contact", current: false },
+    { name: "Home", href: "/", current: location.pathname === "/" },
+    {
+      name: "Events",
+      href: "/events",
+      current: location.pathname === "/events",
+    },
+    {
+      name: "About Us",
+      href: "/about",
+      current: location.pathname === "/about",
+    },
+    {
+      name: "Contact",
+      href: "/contact",
+      current: location.pathname === "/contact",
+    },
   ];
 
   const [open, setOpen] = useState(false);
@@ -30,9 +41,6 @@ export default function Navbar() {
     }
   }, [user]);
 
-  if (!token) {
-    navigation.push({ name: "SignIn", href: "/signin", current: false });
-  }
   //funciones
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -213,7 +221,12 @@ export default function Navbar() {
         </div>
       </div>
 
-      <Sidebar open={open} setOpen={setOpen} navigation={navigation} />
+      <Sidebar
+        open={open}
+        setOpen={setOpen}
+        navigation={navigation}
+        user={user}
+      />
     </nav>
   );
 }
