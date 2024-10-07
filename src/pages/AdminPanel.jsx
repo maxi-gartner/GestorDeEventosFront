@@ -6,6 +6,7 @@ import placesQueries from "../services/placesQueries";
 import RegisterEvent from "./RegisterEvent";
 import RegisterPlace from "./RegisterPlace";
 import SingUp from "./SignUp";
+import Swal from "sweetalert2";
 
 const AdminPanel = () => {
   const userEmail = useSelector((state) => state.user.userData.email) || "";
@@ -43,6 +44,40 @@ const AdminPanel = () => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
+
+  const handleDeleteUser = (email) => {
+    authQueries
+      .deleteUser(email)
+      .then((data) => {
+        if (data.success === false) {
+          Swal.fire({
+            title: "Error",
+            text: data.data.message,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+        Swal.fire({
+          title: "Success",
+          text: data.message,
+          icon: "success",
+          confirmButtonText: "OK",
+          willClose: () => {
+            setUsers(data.response);
+          },
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error",
+          text: error.response.data.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      });
+  };
+
   return (
     <div className="container mx-auto p-6 relative">
       {/* modales */}
@@ -128,7 +163,7 @@ const AdminPanel = () => {
                     </button>
                     <button
                       className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-200 ease-in-out w-24"
-                      /* onClick={() => handleDelete(user.email)} */
+                      onClick={() => handleDeleteUser(user.data.email)}
                     >
                       Delete
                     </button>

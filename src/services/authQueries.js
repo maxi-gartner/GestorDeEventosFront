@@ -24,8 +24,6 @@ const authQueries = {
         {},
         { headers }
       );
-      //console.log("response en login", response);
-      console.log("login...");
       return response.data;
     } catch (err) {
       return err.response;
@@ -57,7 +55,6 @@ const authQueries = {
   },
 
   async updateUser(body) {
-    console.log("body", body);
     try {
       let token = localStorage.getItem("token");
       const sanitizedToken = token ? token.replace(/"/g, "") : null;
@@ -81,6 +78,22 @@ const authQueries = {
         Authorization: `Bearer ${sanitizedToken}`,
       };
       const response = await axios.get(`${apiUrl}auth`, { headers });
+      return response.data;
+    } catch (err) {
+      return err.response;
+    }
+  },
+
+  async deleteUser(email) {
+    try {
+      let token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await axios.delete(`${apiUrl}auth/${email}`, {
+        headers,
+      });
       return response.data;
     } catch (err) {
       return err.response;
