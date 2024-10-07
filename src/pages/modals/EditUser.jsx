@@ -1,41 +1,76 @@
 import { useNavigate } from "react-router-dom";
-import placesQueries from "../services/placesQueries";
+import authQueries from "../../services/authQueries";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 
-export default function RegisterPlace({
-  setModalRegisterPlace,
+export default function RegisterEvent({
+  setModalEditUser,
   setConteinerModals,
+  userToEdit,
+  setUsers,
 }) {
   const navigate = useNavigate();
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    authQueries.getUserByEmail(userToEdit).then((data) => {
+      setUser(data.response);
+    });
+  }, [userToEdit]);
 
   const handleRegister = async (event) => {
     event.preventDefault();
 
-    const name = event.target.name.value;
-    const address = event.target.address.value;
-    const photo = event.target.photo.value;
-    const ocupancy = event.target.ocupancy.value;
+    const email = event.target.email.value;
+    const resetPassword = event.target.resetPassword.value;
+    const repeatResetPassword = event.target.repeatResetPassword.value;
+    const role = event.target.role.value;
 
-    if (!name || !address || !photo || !ocupancy) {
+    if (resetPassword && repeatResetPassword !== resetPassword) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "All fields are required",
+        text: "Passwords do not match",
+      });
+      return;
+    }
+
+    // Creamos un objeto vacío para ir llenando con los campos que el usuario quiera actualizar
+    let body = {};
+
+    if (email) {
+      body.email = email;
+    }
+
+    if (resetPassword) {
+      body.resetPassword = resetPassword;
+    }
+
+    if (role) {
+      body.role = role;
+    }
+
+    if (Object.keys(body).length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No fields to update",
       });
       return;
     }
 
     try {
-      const body = { name, address, photo, ocupancy };
-      const response = await placesQueries.createPlace(body);
+      const response = await authQueries.adminUpdateUser(body, user.data.email);
       if (response.success === true) {
+        setUsers(response.response);
         Swal.fire({
           icon: "success",
           title: response.message,
-          text: "Place successfully created.",
+          text: "User successfully updated.",
           timer: 1500,
           willClose: () => {
             navigate("/adminPanel");
+            setModalEditUser(false);
+            setConteinerModals(false);
           },
         });
       } else {
@@ -49,7 +84,7 @@ export default function RegisterPlace({
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "An unexpected error occurred",
+        text: error.response.data.message,
       });
     }
   };
@@ -61,7 +96,7 @@ export default function RegisterPlace({
           <button
             className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors duration-300 bg-transparent hover:bg-gray-200 p-1 rounded-full"
             onClick={() => {
-              setModalRegisterPlace(false), setConteinerModals(false);
+              setModalEditUser(false), setConteinerModals(false);
             }}
           >
             <svg
@@ -87,69 +122,83 @@ export default function RegisterPlace({
               >
                 <div className="bloque1">
                   <h1 className="mb-4 text-2xl font-bold w-full text-center">
-                    Register Place
+                    Register User
                   </h1>
 
+                  {/* Email */}
                   <div>
-                    <label className="text-sm font-medium" htmlFor="name">
-                      Place Name:
+                    <label className="text-sm font-medium" htmlFor="email">
+                      Email:
                     </label>
                     <input
                       className="block w-full border bg-gray-50 border-gray-300 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm rounded-lg text-black"
-                      id="name"
-                      type="text"
-                      name="name"
-                      required
+                      id="email"
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      placeholder={user.data?.email}
                     />
                   </div>
 
+                  {/* Reset Password */}
                   <div>
-                    <label className="text-sm font-medium" htmlFor="address">
-                      Address:
+                    <label
+                      className="text-sm font-medium"
+                      htmlFor="resetPassword"
+                    >
+                      Reset Password:
                     </label>
                     <input
                       className="block w-full border bg-gray-50 border-gray-300 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm rounded-lg text-black"
-                      id="address"
-                      type="text"
-                      name="address"
-                      required
+                      id="resetPassword"
+                      type="password"
+                      name="resetPassword"
+                      autoComplete="new-password"
                     />
                   </div>
 
+                  {/* Repeat Reset Password */}
                   <div>
-                    <label className="text-sm font-medium" htmlFor="photo">
-                      Photo URL:
+                    <label
+                      className="text-sm font-medium"
+                      htmlFor="repeatResetPassword"
+                    >
+                      Repeat Reset Password:
                     </label>
                     <input
                       className="block w-full border bg-gray-50 border-gray-300 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm rounded-lg text-black"
-                      id="photo"
-                      type="text"
-                      name="photo"
-                      placeholder="https://example.com/image.jpg"
-                      required
+                      id="repeatResetPassword"
+                      type="password"
+                      name="repeatResetPassword"
+                      autoComplete="new-password"
                     />
                   </div>
 
+                  {/* Role */}
                   <div>
-                    <label className="text-sm font-medium" htmlFor="ocupancy">
-                      Occupancy:
+                    <label className="text-sm font-medium" htmlFor="role">
+                      Role: <br></br>Current role: {user.data?.role}
                     </label>
-                    <input
+                    <select
                       className="block w-full border bg-gray-50 border-gray-300 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm rounded-lg text-black"
-                      id="ocupancy"
-                      type="number"
-                      name="ocupancy"
-                      required
-                    />
+                      id="role"
+                      name="role"
+                    >
+                      <option value="">Select a role</option>
+                      <option value="admin">Admin</option>
+                      <option value="user">User</option>
+                      <option value="Organizer">Organizer</option>
+                    </select>
                   </div>
 
+                  {/* Submit Button */}
                   <div className="flex flex-col gap-2">
                     <button
                       type="submit"
                       className="border transition-colors focus:ring-2 p-0.5 disabled:cursor-not-allowed border-transparent bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white disabled:bg-gray-300 disabled:text-gray-700 rounded-lg mt-6"
                     >
                       <span className="flex items-center justify-center gap-1 font-medium py-2">
-                        Register Place
+                        Update User
                       </span>
                     </button>
                   </div>

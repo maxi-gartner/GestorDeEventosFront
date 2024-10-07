@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import authQueries from "../services/authQueries";
 import placesQueries from "../services/placesQueries";
-import RegisterEvent from "./RegisterEvent";
-import RegisterPlace from "./RegisterPlace";
+import RegisterEvent from "./modals/RegisterEvent";
+import RegisterPlace from "./modals/RegisterPlace";
+import EditUser from "./modals/EditUser";
 import SingUp from "./SignUp";
 import Swal from "sweetalert2";
 
@@ -19,6 +20,8 @@ const AdminPanel = () => {
   const [modalRegisterUser, setModalRegisterUser] = useState(false);
   const [modalRegisterPlace, setModalRegisterPlace] = useState(false);
   const [modalRegisterEvent, setModalRegisterEvent] = useState(false);
+  const [modalEditUser, setModalEditUser] = useState(false);
+  const [userToEdit, setUserToEdit] = useState(null);
 
   useEffect(() => {
     if (userEmail) {
@@ -102,10 +105,21 @@ const AdminPanel = () => {
           ) : null}
 
           {modalRegisterUser ? (
-            <div>
+            <div className="max-h-[33rem] overflow-y-scroll sm:max-h-none sm:overflow-y-visible">
               <SingUp
                 setModalRegisterUser={setModalRegisterUser}
                 setConteinerModals={setConteinerModals}
+              />
+            </div>
+          ) : null}
+
+          {modalEditUser ? (
+            <div>
+              <EditUser
+                setModalEditUser={setModalEditUser}
+                setConteinerModals={setConteinerModals}
+                userToEdit={userToEdit}
+                setUsers={setUsers}
               />
             </div>
           ) : null}
@@ -114,7 +128,7 @@ const AdminPanel = () => {
         <></>
       )}
       {/* fin modales */}
-      {/* Sección de perfil */}
+      {/* Sección de perfil admin*/}
       {role === "admin" && (
         <div className="shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Users management</h2>
@@ -157,7 +171,11 @@ const AdminPanel = () => {
                   <div className="flex justify-between gap-6">
                     <button
                       className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out w-24"
-                      /* onClick={() => handleEdit(user.email)} */
+                      onClick={() => {
+                        setModalEditUser(!modalEditUser),
+                          setConteinerModals(!conteinerModals);
+                        setUserToEdit(user.data.email);
+                      }}
                     >
                       Edit
                     </button>
@@ -177,8 +195,8 @@ const AdminPanel = () => {
         </div>
       )}
 
-      {/* Sección de eventos */}
-      {role === "organizer" && (
+      {/* Sección de eventos organizer*/}
+      {role === "admin" && (
         <div className="shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Event management</h2>
           <button
@@ -239,7 +257,7 @@ const AdminPanel = () => {
         </div>
       )}
 
-      {/* Sección de places */}
+      {/* Sección de places admin*/}
       {role === "admin" && (
         <div className="shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Places management</h2>

@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import eventQueries from "../services/eventQueries";
+import eventQueries from "../../services/eventQueries";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import placesQueries from "../services/placesQueries";
+import placesQueries from "../../services/placesQueries";
 
 export default function RegisterEvent({
   setModalRegisterEvent,

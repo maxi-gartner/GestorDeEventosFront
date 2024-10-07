@@ -99,6 +99,26 @@ const authQueries = {
       return err.response;
     }
   },
+
+  async adminUpdateUser(body, email) {
+    try {
+      let token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await axios.put(
+        `${apiUrl}auth/adminUpdateUser/${email}`,
+        body,
+        {
+          headers,
+        }
+      );
+      return response.data;
+    } catch (err) {
+      return err.response;
+    }
+  },
 };
 
 export default authQueries;
