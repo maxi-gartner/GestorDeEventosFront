@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import eventQueries from "../services/eventQueries";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function DetailsEvent() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   console.log("event", event);
@@ -32,10 +34,16 @@ export default function DetailsEvent() {
         });
       } else {
         Swal.fire({
-          title: "Error",
+          title: "You need these registrants to register for events.",
           text: response.data.message,
           icon: "error",
           confirmButtonText: "Confirm",
+          showCancelButton: true,
+          cancelButtonText: "Go to Sign In",
+        }).then((result) => {
+          if (result.isDismissed) {
+            navigate("/signin");
+          }
         });
       }
     } catch {

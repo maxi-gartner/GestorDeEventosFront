@@ -2,58 +2,33 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useDispatch } from "react-redux";
-import { savedUserLogin, logout } from "../redux/actions/userAction";
-import authQueries from "../services/authQueries.js";
 import { useSelector } from "react-redux";
-import eventQueries from "../services/eventQueries.js";
-import { savedEvents } from "../redux/actions/eventsAction";
+import { logout } from "../redux/actions/userAction";
 
 const token = localStorage.getItem("token");
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [viewUser, setViewUser] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const role = useSelector((state) => state.user.userData.role) || "";
   const user = useSelector((state) => state.user.userData);
-  const events = useSelector((state) => state.events.eventsData);
-
-  //CAPTUDADOR AUTOMATICO DE USUARIOS
-  if (token && JSON.stringify(user) === "{}") {
-    authQueries
-      .loginWithToken()
-      .then((data) => {
-        dispatch(savedUserLogin(data.response));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  //CAPTUDADOR AUTOMATICO DE EVENTOS
-  if (JSON.stringify(events) === "{}") {
-    eventQueries
-      .getAllEvents()
-      .then((data) => {
-        dispatch(savedEvents(data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  //actualizar usuario
-  useEffect(() => {
-    if (JSON.stringify(user) !== "{}") {
-      setViewUser(true);
-    }
-  }, [user]);
-
   const navigation = [
     { name: "Home", href: "/", current: true },
     { name: "EventS", href: "/events", current: false },
     { name: "About Us", href: "/about", current: false },
     { name: "Contact", href: "/contact", current: false },
   ];
+
+  const [open, setOpen] = useState(false);
+  const [viewUser, setViewUser] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  //actualizar usuario
+  useEffect(() => {
+    if (JSON.stringify(user) !== "{}") {
+      setViewUser(true);
+    }
+  }, [user]);
 
   if (!token) {
     navigation.push({ name: "SignIn", href: "/signin", current: false });
@@ -194,22 +169,26 @@ export default function Navbar() {
                       >
                         User profile
                       </Link>
-                      <Link
-                        to={`/adminPanel`}
-                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
-                        role="menuitem"
-                        onClick={handleLinkClick}
-                      >
-                        Admin Panel
-                      </Link>
-                      <Link
-                        to={`/organizerPanel`}
-                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
-                        role="menuitem"
-                        onClick={handleLinkClick}
-                      >
-                        Organizer Panel
-                      </Link>
+                      {role === "admin" && (
+                        <Link
+                          to={`/adminPanel`}
+                          className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
+                          role="menuitem"
+                          onClick={handleLinkClick}
+                        >
+                          Admin Panel
+                        </Link>
+                      )}
+                      {role === "organizer" && (
+                        <Link
+                          to={`/adminPanel`}
+                          className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
+                          role="menuitem"
+                          onClick={handleLinkClick}
+                        >
+                          Organizer Panel
+                        </Link>
+                      )}
                       <Link
                         key="logout"
                         to="/"

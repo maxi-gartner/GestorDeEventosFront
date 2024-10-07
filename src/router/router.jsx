@@ -9,8 +9,6 @@ import AboutUs from "../pages/AboutUs.jsx";
 import Contact from "../pages/Contact.jsx";
 import UserControlPanel from "../pages/UserControlPanel.jsx";
 import AdminPanel from "../pages/AdminPanel.jsx";
-import RegisterEvent from "../pages/RegisterEvent.jsx";
-import RegisterPlace from "../pages/RegisterPlace.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,8 +23,6 @@ const router = createBrowserRouter([
       { path: "/contact", element: <Contact /> },
       { path: "/userControlPanel", element: <UserControlPanel /> },
       { path: "/adminPanel", element: <AdminPanel /> },
-      { path: "/registerEvent", element: <RegisterEvent /> },
-      { path: "/registerPlace", element: <RegisterPlace /> },
     ],
   },
 ]);

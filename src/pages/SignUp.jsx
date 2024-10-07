@@ -3,7 +3,7 @@ import authQueries from "../services/authQueries";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-export default function SignUp() {
+export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
@@ -75,7 +75,31 @@ export default function SignUp() {
   return (
     <div className="py-2 sm:py-20">
       <div className="flex h-full items-center justify-center">
-        <div className="rounded-lg bg-[#312e31] shadow-md flex-col flex h-full items-center justify-center sm:px-4">
+        <div className="rounded-lg bg-[#312e31] shadow-md flex-col flex h-full items-center justify-center sm:px-4 relative">
+          {setModalRegisterUser && (
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors duration-300 bg-transparent hover:bg-gray-200 p-1 rounded-full"
+              onClick={() => {
+                setModalRegisterUser(false);
+                setConteinerModals(false);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6 text-red-600"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
           <div className="flex h-full flex-col justify-center gap-4 p-6">
             <div className="left-0 right-0 inline-block border-gray-200 px-2 py-2.5 sm:px-4">
               <form
