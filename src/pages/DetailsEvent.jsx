@@ -33,18 +33,27 @@ export default function DetailsEvent() {
           },
         });
       } else {
-        Swal.fire({
-          title: "You need these registrants to register for events.",
-          text: response.data.message,
-          icon: "error",
-          confirmButtonText: "Confirm",
-          showCancelButton: true,
-          cancelButtonText: "Go to Sign In",
-        }).then((result) => {
-          if (result.isDismissed) {
-            navigate("/signin");
-          }
-        });
+        if (response.data.success === false) {
+          Swal.fire({
+            title: "Error",
+            text: response.data.message,
+            icon: "error",
+            confirmButtonText: "Confirm",
+          });
+        } else {
+          Swal.fire({
+            title: "You need these registrants to register for events.",
+            text: response.data.message,
+            icon: "error",
+            confirmButtonText: "Confirm",
+            showCancelButton: true,
+            cancelButtonText: "Go to Sign In",
+          }).then((result) => {
+            if (result.isDismissed) {
+              navigate("/signin");
+            }
+          });
+        }
       }
     } catch {
       Swal.fire({
