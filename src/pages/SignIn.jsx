@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import authQueries from "../services/authQueries";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/actions/userAction";
+import { savedUserLogin } from "../redux/actions/userAction";
 import Swal from "sweetalert2";
 
 export default function SignIn() {
@@ -14,8 +14,17 @@ export default function SignIn() {
     const password = e.target.password.value;
     const body = { email, password };
     authQueries.signin(body).then((data) => {
-      dispatch(login(data.response));
-      localStorage.setItem("user", JSON.stringify(data.response.data));
+      if (data.success === false) {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      }
+      dispatch(savedUserLogin(data.response));
       localStorage.setItem("token", JSON.stringify(data.response.token));
 
       if (data.success === true) {
@@ -66,6 +75,7 @@ export default function SignIn() {
                         name="email"
                         placeholder="email@example.com"
                         required
+                        autoComplete="email"
                       />
                     </div>
                   </div>
@@ -84,6 +94,7 @@ export default function SignIn() {
                         type="password"
                         name="password"
                         required
+                        autoComplete="current-password"
                       />
                     </div>
                   </div>

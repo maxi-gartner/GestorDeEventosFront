@@ -1,52 +1,59 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import authQueries from "../services/authQueries";
-import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
-export default function SignUp() {
+export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRegister = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
-    const name = event.target.name.value;
-    const lastname = event.target.lastname.value;
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    const confirmPassword = event.target.confirmPassword.value;
-    const age = event.target.age.value;
-    const genre = event.target.genre.value;
-    const role = "user";
+    const { name, lastname, email, password, confirmPassword, age, genre } =
+      event.target;
 
     if (
-      !name ||
-      !lastname ||
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !age ||
-      !genre ||
-      !role
+      !name.value ||
+      !lastname.value ||
+      !email.value ||
+      !password.value ||
+      !confirmPassword.value ||
+      !age.value ||
+      !genre.value
     ) {
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "All fields are required",
       });
+      setIsSubmitting(false);
       return;
     }
-    if (password !== confirmPassword) {
+
+    if (password.value !== confirmPassword.value) {
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "Passwords do not match",
       });
+      setIsSubmitting(false);
       return;
     }
+
     try {
-      const body = { name, lastname, email, password, age, genre, role };
+      const body = {
+        name: name.value,
+        lastname: lastname.value,
+        email: email.value,
+        password: password.value,
+        age: age.value,
+        genre: genre.value,
+        role: "user",
+      };
       const response = await authQueries.signup(body);
-      if (response.success === true) {
+      if (response.success) {
         Swal.fire({
           icon: "success",
           title: response.message,
@@ -67,19 +74,45 @@ export default function SignUp() {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response.data.message,
+        text: error.response?.data?.message || "An unexpected error occurred.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="py-2 sm:py-20">
       <div className="flex h-full items-center justify-center">
-        <div className="rounded-lg bg-[#312e31] shadow-md flex-col flex h-full items-center justify-center sm:px-4">
+        <div className="rounded-lg bg-[#312e31] shadow-md flex-col flex h-full items-center justify-center sm:px-4 relative">
+          {setModalRegisterUser && (
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors duration-300 bg-transparent hover:bg-gray-200 p-1 rounded-full"
+              onClick={() => {
+                setModalRegisterUser(false);
+                setConteinerModals(false);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6 text-red-600"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
           <div className="flex h-full flex-col justify-center gap-4 p-6">
             <div className="left-0 right-0 inline-block border-gray-200 px-2 py-2.5 sm:px-4">
               <form
-                className="flex flex-col gap-4 pb-4 lg:flex-row lg:gap-8"
+                className="flex flex-col gap-4 pb-4 sm:flex-row sm:gap-8"
                 onSubmit={handleRegister}
               >
                 <div className="bloque1">
@@ -97,6 +130,7 @@ export default function SignUp() {
                       type="text"
                       name="name"
                       required
+                      autoComplete="given-name"
                     />
                   </div>
 
@@ -110,6 +144,7 @@ export default function SignUp() {
                       type="text"
                       name="lastname"
                       required
+                      autoComplete="family-name"
                     />
                   </div>
 
@@ -124,6 +159,7 @@ export default function SignUp() {
                       name="email"
                       placeholder="email@example.com"
                       required
+                      autoComplete="email"
                     />
                   </div>
 
@@ -137,6 +173,7 @@ export default function SignUp() {
                       type="password"
                       name="password"
                       required
+                      autoComplete="new-password"
                     />
                   </div>
                   <div>
@@ -149,9 +186,10 @@ export default function SignUp() {
                     <input
                       className="block w-full border bg-gray-50 border-gray-300 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm rounded-lg text-black"
                       id="confirmPassword"
-                      type="Password"
+                      type="password"
                       name="confirmPassword"
                       required
+                      autoComplete="new-password"
                     />
                   </div>
 
@@ -164,6 +202,7 @@ export default function SignUp() {
                       id="age"
                       type="number"
                       name="age"
+                      min="1"
                       required
                     />
                   </div>
@@ -178,7 +217,7 @@ export default function SignUp() {
                       name="genre"
                       required
                     >
-                      <option value="" disabled selected>
+                      <option value="" disabled>
                         Select your genre
                       </option>
                       <option value="male">Male</option>
@@ -190,10 +229,15 @@ export default function SignUp() {
                   <div className="flex flex-col gap-2">
                     <button
                       type="submit"
-                      className="border transition-colors focus:ring-2 p-0.5 disabled:cursor-not-allowed border-transparent bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white disabled:bg-gray-300 disabled:text-gray-700 rounded-lg mt-6"
+                      disabled={isSubmitting} // Deshabilitar botón durante el envío
+                      className={`border transition-colors focus:ring-2 p-0.5 ${
+                        isSubmitting
+                          ? "cursor-not-allowed"
+                          : "bg-sky-600 hover:bg-sky-700 active:bg-sky-800"
+                      } text-white rounded-lg mt-6`}
                     >
                       <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base">
-                        Register
+                        {isSubmitting ? "Registering..." : "Register"}
                       </span>
                     </button>
                   </div>

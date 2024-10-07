@@ -1,8 +1,39 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
+import eventQueries from "../services/eventQueries.js";
+import { savedEvents } from "../redux/actions/eventsAction";
+import { savedUserLogin } from "../redux/actions/userAction";
+import authQueries from "../services/authQueries.js";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 export default function Main() {
+  const dispatch = useDispatch();
+  //CAPTUDADOR AUTOMATICO DE USUARIOS
+  useEffect(() => {
+    authQueries
+      .loginWithToken()
+      .then((data) => {
+        dispatch(savedUserLogin(data.response));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  //CAPTUDADOR AUTOMATICO DE EVENTOS
+  useEffect(() => {
+    eventQueries
+      .getAllEvents()
+      .then((data) => {
+        dispatch(savedEvents(data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
   return (
     <>
       <Navbar />

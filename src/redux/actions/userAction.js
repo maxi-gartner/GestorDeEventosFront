@@ -1,12 +1,8 @@
 import { createAction } from "@reduxjs/toolkit";
 
-export const login = createAction("login", (data) => {
-  //console.log("data en action", data);
+export const savedUserLogin = createAction("savedUserLogin", (data) => {
   return {
-    payload: {
-      user: data.user,
-      token: data.token,
-    },
+    payload: data,
   };
 });
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import eventQueries from "../services/eventQueries";
 import placesQueries from "../services/placesQueries";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const dataBox = (events) => {
   let attendees = 0;
@@ -32,22 +32,23 @@ export default function Index() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [places, setPlaces] = useState([]);
+  const data = useSelector((state) => state.events.eventsData);
 
   useEffect(() => {
-    eventQueries.getAllEvents().then(setEvents);
+    if (JSON.stringify(data) !== "{}") {
+      setEvents(data);
+    }
+  }, [data]);
+  useEffect(() => {
     placesQueries.getAllPlaces().then(setPlaces);
   }, []);
+
   let now = new Date();
-
   let upcomingEvents = events.filter((event) => new Date(event.date) > now);
-
   let sortedPastEvents = upcomingEvents.sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
-
   let nearbyEvents = sortedPastEvents.slice(0, 2);
-  //console.log("places", places);
-  //console.log("dataBox1", dataBox(events));
 
   return (
     <div className="flex flex-col items-center">
@@ -100,7 +101,7 @@ export default function Index() {
               <Link
                 to={`/event/${event.id}`}
                 key={index}
-                className="mb-4 flex flex-col gap-1 py-2 sm:w-2xl"
+                className="mb-4 flex flex-col gap-1 py-2 sm:w-2xl justify-center items-center"
               >
                 <h2 className="text-lg font-semibold mb-2 w-full text-center">
                   {event.name}
@@ -112,7 +113,7 @@ export default function Index() {
                 <img
                   src={event.photo}
                   alt={event.name}
-                  className="w-full max-h-[200px] object-cover sm:h-60 shadow-lg shadow-black mb-2"
+                  className="w-[35rem] h-[200px] object-cover sm:h-60 shadow-lg shadow-black mb-2"
                   onError={(e) =>
                     (e.target.src =
                       "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")

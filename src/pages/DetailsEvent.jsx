@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import eventQueries from "../services/eventQueries";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function DetailsEvent() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [isRegistered, setIsRegistered] = useState(false);
-  //console.log("event", event);
-  console.log("isRegistered", isRegistered);
 
   useEffect(() => {
     eventQueries.getEvent(id).then(setEvent);
@@ -18,7 +18,6 @@ export default function DetailsEvent() {
   async function registerToEvent(id) {
     try {
       const response = await eventQueries.registerToEvent(id);
-      console.log("response", response);
       if (response.data.success === true) {
         Swal.fire({
           title: "Success",
@@ -30,12 +29,27 @@ export default function DetailsEvent() {
           },
         });
       } else {
-        Swal.fire({
-          title: "Error",
-          text: response.data.message,
-          icon: "error",
-          confirmButtonText: "Confirm",
-        });
+        if (response.data.success === false) {
+          Swal.fire({
+            title: "Error",
+            text: response.data.message,
+            icon: "error",
+            confirmButtonText: "Confirm",
+          });
+        } else {
+          Swal.fire({
+            title: "You need these registrants to register for events.",
+            text: response.data.message,
+            icon: "error",
+            confirmButtonText: "Confirm",
+            showCancelButton: true,
+            cancelButtonText: "Go to Sign In",
+          }).then((result) => {
+            if (result.isDismissed) {
+              navigate("/signin");
+            }
+          });
+        }
       }
     } catch {
       Swal.fire({
@@ -87,6 +101,10 @@ export default function DetailsEvent() {
           src={event.photo}
           alt={event.name}
           className="w-full sm:w-1/2 max-h-96 object-cover rounded-lg"
+          onError={(e) =>
+            (e.target.src =
+              "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")
+          }
         />
         <div className="sm:w-1/2">
           <h2 className="text-2xl font-semibold mb-4">Event Details</h2>
@@ -111,6 +129,10 @@ export default function DetailsEvent() {
             src={event.place.photo}
             alt={event.place.name}
             className="w-full sm:w-1/2 max-h-96 object-cover rounded-lg"
+            onError={(e) =>
+              (e.target.src =
+                "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")
+            }
           />
           <div className="sm:w-1/2">
             <p className="mb-2">

@@ -1,39 +1,56 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useDispatch } from "react-redux";
-import { login, logout } from "../redux/actions/userAction";
-//const URL = import.meta.env.DATABASE_URL;
-//console.log("La URL de la base de datos es:", URL);
+import { useSelector } from "react-redux";
+import { logout } from "../redux/actions/userAction";
 
 export default function Navbar() {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user")) || null;
-  if (user) {
-    dispatch(
-      login({
-        user: user,
-        token: token,
-      })
-    );
-  }
-  //console.log(user);
-
+  const role = useSelector((state) => state.user.userData.role) || "";
+  console.log("role", role);
+  const user = useSelector((state) => state.user.userData);
   const navigation = [
-    { name: "Home", href: "/", current: true },
-    { name: "EventS", href: "/events", current: false },
-    { name: "About Us", href: "/about", current: false },
-    { name: "Contact", href: "/contact", current: false },
+    { name: "Home", href: "/", current: location.pathname === "/" },
+    {
+      name: "Events",
+      href: "/events",
+      current: location.pathname === "/events",
+    },
+    {
+      name: "About Us",
+      href: "/about",
+      current: location.pathname === "/about",
+    },
+    {
+      name: "Contact",
+      href: "/contact",
+      current: location.pathname === "/contact",
+    },
   ];
+  const token = localStorage.getItem("token") || null;
 
   if (!token) {
-    navigation.push({ name: "SignIn", href: "/signin", current: false });
+    navigation.push({
+      name: "SignIn",
+      href: "/signin",
+      current: location.pathname === "/signin",
+    });
   }
+
+  const [open, setOpen] = useState(false);
+  const [viewUser, setViewUser] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  //actualizar usuario
+  useEffect(() => {
+    if (JSON.stringify(user) !== "{}") {
+      setViewUser(true);
+    }
+  }, [user]);
+
   //funciones
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -41,6 +58,10 @@ export default function Navbar() {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+
+  const handleLinkClick = () => {
+    setIsOpen(false); // Esto cierra el menú
+  };
 
   const capitalizeWords = (str) => {
     if (!str) return ""; // Manejo de cadena vacía o undefined
@@ -120,7 +141,7 @@ export default function Navbar() {
                   {item.name}
                 </Link>
               ))}
-              {token && (
+              {viewUser ? (
                 <div className="relative">
                   {/* desplegable usuario */}
                   <section className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md py-2 text-lg sm:text-lg font-medium max-h-[5vh] flex items-center">
@@ -129,7 +150,7 @@ export default function Navbar() {
                       className="w-auto px-4s py-2 flex items-center whitespace-nowrap"
                     >
                       {/* nombre de usuario */}
-                      {user ? (
+                      {user.leght !== 0 ? (
                         `${capitalizeWords(user.name)}  ${capitalizeWords(
                           user.lastname
                         )}`
@@ -151,22 +172,50 @@ export default function Navbar() {
                     </button>
                   </section>
                   {isOpen && (
-                    <div className="absolute right-0 rounded-md bg-[#312e31] text-gray-300 text-lg sm:text-lg font-medium">
+                    <div className="absolute right-0 rounded-md bg-[#312e31] text-gray-300 text-lg sm:text-lg font-medium z-20">
+                      <div
+                        className="fixed left-0 top-0 w-screen h-screen z-10"
+                        onClick={handleLinkClick}
+                      ></div>
+
+                      {/* Menú desplegable */}
                       <Link
-                        to={`/userControlPanel/${user.email}`}
-                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md"
+                        to={`/userControlPanel`}
+                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
                         role="menuitem"
+                        onClick={handleLinkClick}
                       >
                         User profile
                       </Link>
+                      {role === "admin" && (
+                        <Link
+                          to={`/adminPanel`}
+                          className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
+                          role="menuitem"
+                          onClick={handleLinkClick}
+                        >
+                          Admin Panel
+                        </Link>
+                      )}
+                      {role === "organizer" && (
+                        <Link
+                          to={`/adminPanel`}
+                          className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md whitespace-nowrap z-20 relative"
+                          role="menuitem"
+                          onClick={handleLinkClick}
+                        >
+                          Organizer Panel
+                        </Link>
+                      )}
                       <Link
                         key="logout"
                         to="/"
-                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md"
+                        className="block px-9 py-2 hover:bg-gray-700 hover:text-white rounded-md z-20 relative"
                         onClick={() => {
                           localStorage.clear();
                           dispatch(logout());
                           navigate("/");
+                          handleLinkClick();
                         }}
                       >
                         LogOut
@@ -174,13 +223,20 @@ export default function Navbar() {
                     </div>
                   )}
                 </div>
+              ) : (
+                <></>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      <Sidebar open={open} setOpen={setOpen} navigation={navigation} />
+      <Sidebar
+        open={open}
+        setOpen={setOpen}
+        navigation={navigation}
+        user={user}
+      />
     </nav>
   );
 }
