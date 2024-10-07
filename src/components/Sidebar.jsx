@@ -77,6 +77,7 @@ function Sidebar({ open, setOpen, navigation, user }) {
         ))}
 
         <ul className="space-y-1">
+          {/* 
           {!user.name && (
             <li>
               <Link
@@ -87,7 +88,7 @@ function Sidebar({ open, setOpen, navigation, user }) {
                 Sign In
               </Link>
             </li>
-          )}
+          )} */}
           <li>
             <Link
               key="logout" // Esto está bien

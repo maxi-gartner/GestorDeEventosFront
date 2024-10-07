@@ -30,6 +30,15 @@ export default function Navbar() {
       current: location.pathname === "/contact",
     },
   ];
+  const token = localStorage.getItem("token") || null;
+
+  if (!token) {
+    navigation.push({
+      name: "SignIn",
+      href: "/signin",
+      current: location.pathname === "/signin",
+    });
+  }
 
   const [open, setOpen] = useState(false);
   const [viewUser, setViewUser] = useState(false);
