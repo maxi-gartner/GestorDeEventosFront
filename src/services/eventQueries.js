@@ -16,7 +16,7 @@ const eventQueries = {
 
   async getEvent(id) {
     try {
-      const response = await apiEvents.get(id); // Cambiado a GET
+      const response = await apiEvents.get(id);
       return response.data.response.data;
     } catch (err) {
       return err.response;
@@ -88,6 +88,40 @@ const eventQueries = {
     } catch (err) {
       console.log("error in catch query", err);
       return err.response;
+    }
+  },
+
+  async getEventById(id) {
+    try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await apiEvents.get(`/${id}`, { headers });
+      return response.data.response.data;
+    } catch (err) {
+      console.log("error in catch query", err);
+      return err.response;
+    }
+  },
+
+  async organizerUpdateUser(body, id) {
+    try {
+      console.log("paso por aca");
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await apiEvents.put(`update/${id}`, body, {
+        headers,
+      });
+      console.log("response in organizerUpdateUser", response);
+      return response.data;
+    } catch (err) {
+      console.log("error in catch query", err);
+      return err.response.data;
     }
   },
 };

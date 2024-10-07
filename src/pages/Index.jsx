@@ -101,7 +101,7 @@ export default function Index() {
               <Link
                 to={`/event/${event.id}`}
                 key={index}
-                className="mb-4 flex flex-col gap-1 py-2 sm:w-2xl"
+                className="mb-4 flex flex-col gap-1 py-2 sm:w-2xl justify-center items-center"
               >
                 <h2 className="text-lg font-semibold mb-2 w-full text-center">
                   {event.name}
@@ -113,7 +113,7 @@ export default function Index() {
                 <img
                   src={event.photo}
                   alt={event.name}
-                  className="w-full max-h-[200px] object-cover sm:h-60 shadow-lg shadow-black mb-2"
+                  className="w-[35rem] h-[200px] object-cover sm:h-60 shadow-lg shadow-black mb-2"
                   onError={(e) =>
                     (e.target.src =
                       "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")

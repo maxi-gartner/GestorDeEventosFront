@@ -5,6 +5,7 @@ import authQueries from "../services/authQueries";
 import placesQueries from "../services/placesQueries";
 import RegisterEvent from "./modals/RegisterEvent";
 import RegisterPlace from "./modals/RegisterPlace";
+import EditEvent from "./modals/EditEvent";
 import EditUser from "./modals/EditUser";
 import SingUp from "./SignUp";
 import Swal from "sweetalert2";
@@ -12,8 +13,11 @@ import Swal from "sweetalert2";
 const AdminPanel = () => {
   const userEmail = useSelector((state) => state.user.userData.email) || "";
   const role = useSelector((state) => state.user.userData.role) || "";
-  const events = useSelector((state) => state.events.eventsData);
-
+  const eventsData = useSelector((state) => state.events.eventsData);
+  const [events, setEvents] = useState({});
+  useEffect(() => {
+    setEvents(eventsData);
+  }, [eventsData]);
   const [users, setUsers] = useState({});
   const [places, setPlaces] = useState([]);
   const [conteinerModals, setConteinerModals] = useState(false);
@@ -21,7 +25,9 @@ const AdminPanel = () => {
   const [modalRegisterPlace, setModalRegisterPlace] = useState(false);
   const [modalRegisterEvent, setModalRegisterEvent] = useState(false);
   const [modalEditUser, setModalEditUser] = useState(false);
+  const [modalEditEvent, setModalEditEvent] = useState(false);
   const [userToEdit, setUserToEdit] = useState(null);
+  const [eventToEdit, setEventToEdit] = useState(null);
 
   useEffect(() => {
     if (userEmail) {
@@ -123,6 +129,17 @@ const AdminPanel = () => {
               />
             </div>
           ) : null}
+
+          {modalEditEvent ? (
+            <div>
+              <EditEvent
+                setModalEditEvent={setModalEditEvent}
+                setConteinerModals={setConteinerModals}
+                eventToEdit={eventToEdit}
+                setEvents={setEvents}
+              />
+            </div>
+          ) : null}
         </div>
       ) : (
         <></>
@@ -196,7 +213,7 @@ const AdminPanel = () => {
       )}
 
       {/* Sección de eventos organizer*/}
-      {role === "admin" && (
+      {role === "organizer" && (
         <div className="shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Event management</h2>
           <button
@@ -237,7 +254,11 @@ const AdminPanel = () => {
                   <div className="flex justify-between gap-6">
                     <button
                       className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out w-24"
-                      /* onClick={() => handleEdit(user.email)} */
+                      onClick={() => {
+                        setModalEditEvent(!modalEditEvent),
+                          setConteinerModals(!conteinerModals);
+                        setEventToEdit(event.id);
+                      }}
                     >
                       Edit
                     </button>
