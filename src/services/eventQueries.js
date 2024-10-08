@@ -124,6 +124,43 @@ const eventQueries = {
       return err.response.data;
     }
   },
+
+  async submitRating(body, id) {
+    try {
+      console.log("body", body);
+      console.log("id", id);
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await apiEvents.post(`vote/${id}`, body, {
+        headers,
+      });
+      return response.data;
+    } catch (err) {
+      console.log("error in catch query", err);
+      return err.response.data;
+    }
+  },
+
+  async submitComment(body, id) {
+    try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await apiEvents.post(`comment/${id}`, body, {
+        headers,
+      });
+      console.log("response in submitComment", response);
+      return response.data;
+    } catch (err) {
+      console.log("error in catch query", err);
+      return err.response.data;
+    }
+  },
 };
 
 export default eventQueries;
