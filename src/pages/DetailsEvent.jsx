@@ -11,7 +11,6 @@ export default function DetailsEvent() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  console.log("event", event);
 
   useEffect(() => {
     eventQueries.getEvent(id).then(setEvent);
@@ -73,7 +72,6 @@ export default function DetailsEvent() {
   };
   const submitRating = async () => {
     try {
-      console.log("rating", rating);
       const body = {
         vote: rating,
       };

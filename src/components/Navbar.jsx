@@ -10,7 +10,6 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const role = useSelector((state) => state.user.userData.role) || "";
-  console.log("role", role);
   const user = useSelector((state) => state.user.userData);
   const navigation = [
     { name: "Home", href: "/", current: location.pathname === "/" },
