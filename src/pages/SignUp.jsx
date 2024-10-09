@@ -2,6 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import authQueries from "../services/authQueries";
 import Swal from "sweetalert2";
 import { useState } from "react";
+import alert from "../services/alerts/loading";
 
 export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
   const handleRegister = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
+    alert("Signing up...");
 
     const { name, lastname, email, password, confirmPassword, age, genre } =
       event.target;
@@ -29,6 +31,7 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
         text: "All fields are required",
       });
       setIsSubmitting(false);
+      Swal.close();
       return;
     }
 
@@ -39,6 +42,7 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
         text: "Passwords do not match",
       });
       setIsSubmitting(false);
+      Swal.close();
       return;
     }
 
@@ -54,6 +58,7 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
       };
       const response = await authQueries.signup(body);
       if (response.success) {
+        Swal.close();
         Swal.fire({
           icon: "success",
           title: response.message,
@@ -64,6 +69,7 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
           },
         });
       } else {
+        Swal.close();
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -71,6 +77,7 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
         });
       }
     } catch (error) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",

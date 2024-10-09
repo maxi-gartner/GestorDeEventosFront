@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../App.jsx";
-import Layouts from "../layouts/Main.jsx";
+import Layouts from "../layouts/Layouts.jsx";
 import SignUp from "../pages/SignUp.jsx";
 import SignIn from "../pages/SignIn.jsx";
 import Events from "../pages/Events.jsx";

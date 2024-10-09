@@ -9,6 +9,7 @@ import EditEvent from "./modals/EditEvent";
 import EditUser from "./modals/EditUser";
 import SingUp from "./SignUp";
 import Swal from "sweetalert2";
+import alert from "../services/alerts/loading";
 
 const AdminPanel = () => {
   const userEmail = useSelector((state) => state.user.userData.email) || "";
@@ -55,10 +56,12 @@ const AdminPanel = () => {
   };
 
   const handleDeleteUser = (email) => {
+    alert("Deleting user...");
     authQueries
       .deleteUser(email)
       .then((data) => {
         if (data.success === false) {
+          Swal.close();
           Swal.fire({
             title: "Error",
             text: data.data.message,
@@ -67,6 +70,7 @@ const AdminPanel = () => {
           });
           return;
         }
+        Swal.close();
         Swal.fire({
           title: "Success",
           text: data.message,
@@ -78,6 +82,7 @@ const AdminPanel = () => {
         });
       })
       .catch((error) => {
+        Swal.close();
         Swal.fire({
           title: "Error",
           text: error.response.data.message,

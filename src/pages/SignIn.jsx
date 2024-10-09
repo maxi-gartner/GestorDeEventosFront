@@ -4,11 +4,14 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { savedUserLogin } from "../redux/actions/userAction";
 import Swal from "sweetalert2";
+import alert from "../services/alerts/loading";
 
 export default function SignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleLogin = async (e) => {
+    alert("Signing in...");
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -21,6 +24,9 @@ export default function SignIn() {
           title: data.message,
           showConfirmButton: false,
           timer: 1500,
+          willClose: () => {
+            Swal.close();
+          },
         });
         return;
       }
@@ -36,6 +42,7 @@ export default function SignIn() {
           timer: 1500,
           willClose: () => {
             navigate("/");
+            Swal.close();
           },
         });
       } else {
@@ -45,6 +52,9 @@ export default function SignIn() {
           title: data.message,
           showConfirmButton: false,
           timer: 1500,
+          willClose: () => {
+            Swal.close();
+          },
         });
       }
     });

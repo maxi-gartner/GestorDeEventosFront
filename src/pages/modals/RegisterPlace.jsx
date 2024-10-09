@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import placesQueries from "../../services/placesQueries";
 import Swal from "sweetalert2";
+import alert from "../../services/alerts/loading";
 
 export default function RegisterPlace({
   setModalRegisterPlace,
@@ -9,6 +10,7 @@ export default function RegisterPlace({
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
+    alert("Registering place");
     event.preventDefault();
 
     const name = event.target.name.value;
@@ -17,6 +19,7 @@ export default function RegisterPlace({
     const ocupancy = event.target.ocupancy.value;
 
     if (!name || !address || !photo || !ocupancy) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -29,6 +32,7 @@ export default function RegisterPlace({
       const body = { name, address, photo, ocupancy };
       const response = await placesQueries.createPlace(body);
       if (response.success === true) {
+        Swal.close();
         Swal.fire({
           icon: "success",
           title: response.message,
@@ -39,6 +43,7 @@ export default function RegisterPlace({
           },
         });
       } else {
+        Swal.close();
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -46,6 +51,7 @@ export default function RegisterPlace({
         });
       }
     } catch (error) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",

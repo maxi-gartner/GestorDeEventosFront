@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import eventQueries from "../../services/eventQueries";
+import alert from "../../services/alerts/loading";
 
 export default function RegisterEvent({
   setModalEditEvent,
@@ -18,6 +19,7 @@ export default function RegisterEvent({
   }, [eventToEdit]);
 
   const handleUpdate = async (event) => {
+    alert("Updating event...");
     event.preventDefault();
 
     const date = event.target.date.value;
@@ -49,6 +51,7 @@ export default function RegisterEvent({
       body.minimumAge = minimumAge;
     }
     if (Object.keys(body).length === 0) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -63,6 +66,7 @@ export default function RegisterEvent({
         eventToUpdate.id
       );
       if (response.success === true) {
+        Swal.close();
         const response = await eventQueries.getAllEvents();
         setEvents(response);
         Swal.fire({
@@ -77,6 +81,7 @@ export default function RegisterEvent({
           },
         });
       } else {
+        Swal.close();
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -84,6 +89,7 @@ export default function RegisterEvent({
         });
       }
     } catch (error) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",

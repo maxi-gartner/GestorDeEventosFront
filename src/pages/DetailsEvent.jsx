@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import eventQueries from "../services/eventQueries";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import alert from "../services/alerts/loading";
 
 export default function DetailsEvent() {
   const navigate = useNavigate();
@@ -18,9 +19,11 @@ export default function DetailsEvent() {
   }, [id]);
 
   async function registerToEvent(id) {
+    alert("Registering for event...");
     try {
       const response = await eventQueries.registerToEvent(id);
       if (response.data.success === true) {
+        Swal.close();
         Swal.fire({
           title: "Success",
           text: response.data.message,
@@ -32,6 +35,7 @@ export default function DetailsEvent() {
         });
       } else {
         if (response.data.success === false) {
+          Swal.close();
           Swal.fire({
             title: "Error",
             text: response.data.message,
@@ -39,6 +43,7 @@ export default function DetailsEvent() {
             confirmButtonText: "Confirm",
           });
         } else {
+          Swal.close();
           Swal.fire({
             title: "You need these registrants to register for events.",
             text: response.data.message,
@@ -54,6 +59,7 @@ export default function DetailsEvent() {
         }
       }
     } catch {
+      Swal.close();
       Swal.fire({
         title: "Error",
         text: "Error registering for event",
@@ -64,13 +70,18 @@ export default function DetailsEvent() {
   }
 
   if (!event) {
-    return <p>Cargando evento...</p>;
+    alert("Loading event...");
+    return <></>;
+  }
+  if (event) {
+    Swal.close();
   }
   /* VOTOS */
   const handleRatingChange = (e) => {
     setRating(e.target.value);
   };
   const submitRating = async () => {
+    alert("Submitting rating...");
     try {
       const body = {
         vote: rating,
@@ -90,6 +101,9 @@ export default function DetailsEvent() {
           text: response.message,
           icon: "error",
           confirmButtonText: "Confirm",
+          willClose: () => {
+            Swal.close();
+          },
         });
       }
     } catch {
@@ -98,6 +112,9 @@ export default function DetailsEvent() {
         text: "Error submitting rating",
         icon: "error",
         confirmButtonText: "Confirm",
+        willClose: () => {
+          Swal.close();
+        },
       });
     }
   };
@@ -106,6 +123,7 @@ export default function DetailsEvent() {
     setComment(e.target.value);
   };
   const submitComment = async () => {
+    alert("Submitting comment...");
     try {
       const body = {
         comment: comment,
@@ -118,6 +136,9 @@ export default function DetailsEvent() {
           text: response.message,
           icon: "success",
           confirmButtonText: "Confirm",
+          willClose: () => {
+            Swal.close();
+          },
         });
       } else {
         Swal.fire({
@@ -125,6 +146,9 @@ export default function DetailsEvent() {
           text: response.message,
           icon: "error",
           confirmButtonText: "Confirm",
+          willClose: () => {
+            Swal.close();
+          },
         });
       }
     } catch {
@@ -133,6 +157,9 @@ export default function DetailsEvent() {
         text: "Error submitting comment",
         icon: "error",
         confirmButtonText: "Confirm",
+        willClose: () => {
+          Swal.close();
+        },
       });
     }
   };

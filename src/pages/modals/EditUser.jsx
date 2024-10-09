@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import authQueries from "../../services/authQueries";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
+import alert from "../../services/alerts/loading";
 
 export default function RegisterEvent({
   setModalEditUser,
@@ -18,6 +19,7 @@ export default function RegisterEvent({
   }, [userToEdit]);
 
   const handleRegister = async (event) => {
+    alert("Updating user...");
     event.preventDefault();
 
     const email = event.target.email.value;
@@ -26,6 +28,7 @@ export default function RegisterEvent({
     const role = event.target.role.value;
 
     if (resetPassword && repeatResetPassword !== resetPassword) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -50,6 +53,7 @@ export default function RegisterEvent({
     }
 
     if (Object.keys(body).length === 0) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -62,6 +66,7 @@ export default function RegisterEvent({
       const response = await authQueries.adminUpdateUser(body, user.data.email);
       if (response.success === true) {
         setUsers(response.response);
+        Swal.close();
         Swal.fire({
           icon: "success",
           title: response.message,
@@ -74,6 +79,7 @@ export default function RegisterEvent({
           },
         });
       } else {
+        Swal.close();
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -81,6 +87,7 @@ export default function RegisterEvent({
         });
       }
     } catch (error) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import placesQueries from "../../services/placesQueries";
+import alert from "../../services/alerts/loading";
 
 export default function RegisterEvent({
   setModalRegisterEvent,
@@ -14,6 +15,7 @@ export default function RegisterEvent({
   const user = useSelector((state) => state.user.userData);
 
   const handleRegister = async (event) => {
+    alert("Registering event");
     event.preventDefault();
 
     const place = event.target.place.value;
@@ -24,6 +26,7 @@ export default function RegisterEvent({
     const photo = event.target.photo.value;
 
     if (!place || !date || !name || !description || !minimumAge || !photo) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -36,6 +39,7 @@ export default function RegisterEvent({
       const body = { place, date, name, description, minimumAge, photo };
       const response = await eventQueries.createEvent(body);
       if (response.success === true) {
+        Swal.close();
         Swal.fire({
           icon: "success",
           title: response.message,
@@ -46,6 +50,7 @@ export default function RegisterEvent({
           },
         });
       } else {
+        Swal.close();
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -53,6 +58,7 @@ export default function RegisterEvent({
         });
       }
     } catch (error) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Error",
