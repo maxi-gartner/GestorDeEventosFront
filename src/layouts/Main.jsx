@@ -12,14 +12,18 @@ export default function Main() {
   const dispatch = useDispatch();
   //CAPTUDADOR AUTOMATICO DE USUARIOS
   useEffect(() => {
-    authQueries
-      .loginWithToken()
-      .then((data) => {
-        dispatch(savedUserLogin(data.response));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      authQueries
+        .loginWithToken(token)
+        .then((data) => {
+          dispatch(savedUserLogin(data.response));
+        })
+        .catch((err) => {
+          console.log("Error durante el login:", err);
+        });
+    }
   });
 
   //CAPTUDADOR AUTOMATICO DE EVENTOS
