@@ -126,7 +126,7 @@ export default function Index() {
               </Link>
             ))
           ) : (
-            <p>No events found.</p>
+            <></>
           )}
         </div>
       </div>
