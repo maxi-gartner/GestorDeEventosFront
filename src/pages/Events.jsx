@@ -60,7 +60,7 @@ export default function Events() {
             </Link>
           ))
         ) : (
-          <p>No events found.</p>
+          <></>
         )}
       </div>
     </div>
