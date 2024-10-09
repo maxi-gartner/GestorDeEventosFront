@@ -1,12 +1,14 @@
 import axios from "axios";
+import apiUrl from "../../api.js";
+
 const apiEvents = axios.create({
-  baseURL: "http://localhost:4000/api/event/",
+  baseURL: `${apiUrl}event/`,
 });
 
 const eventQueries = {
   async getAllEvents() {
     try {
-      const response = await apiEvents.get(); // Asegúrate de hacer un GET
+      const response = await apiEvents.get();
       return response.data.response.map((event) => event.data);
     } catch (err) {
       console.log(err);
@@ -26,14 +28,13 @@ const eventQueries = {
   async registerToEvent(id) {
     try {
       const token = localStorage.getItem("token");
-      const sanitizedToken = token ? token.replace(/"/g, "") : null; // Verifica si el token no es null
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
       const headers = {
-        Authorization: `Bearer ${sanitizedToken}`, // Usa el token saneado
+        Authorization: `Bearer ${sanitizedToken}`,
       };
       const response = await apiEvents.post(`register/${id}`, {}, { headers });
       return response;
     } catch (err) {
-      //console.log("error in catch query", err);
       return err.response;
     }
   },
@@ -41,9 +42,9 @@ const eventQueries = {
   async unsubscribe(id) {
     try {
       const token = localStorage.getItem("token");
-      const sanitizedToken = token ? token.replace(/"/g, "") : null; // Verifica si el token no es null
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
       const headers = {
-        Authorization: `Bearer ${sanitizedToken}`, // Usa el token saneado
+        Authorization: `Bearer ${sanitizedToken}`,
       };
       const response = await apiEvents.post(
         `unsubscribe/${id}`,
@@ -52,7 +53,7 @@ const eventQueries = {
       );
       return response;
     } catch (err) {
-      console.log("error in catch query", err);
+      console.log(err);
       return err.response;
     }
   },
@@ -60,16 +61,13 @@ const eventQueries = {
   async isRegistered(id) {
     try {
       const token = localStorage.getItem("token");
-      const sanitizedToken = token ? token.replace(/"/g, "") : null; // Verifica si el token no es null
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
       const headers = {
-        Authorization: `Bearer ${sanitizedToken}`, // Usa el token saneado
+        Authorization: `Bearer ${sanitizedToken}`,
       };
       const response = await apiEvents.get(`registered/${id}`, { headers });
-
-      //console.log("response", response);
       return response.data.isRegistered;
-    } catch /* (err)  */ {
-      //console.log("error in catch query", err);
+    } catch {
       return false;
     }
   },
@@ -81,12 +79,10 @@ const eventQueries = {
       const headers = {
         Authorization: `Bearer ${sanitizedToken}`,
       };
-      const response = await apiEvents.post(`create`, body, {
-        headers,
-      });
+      const response = await apiEvents.post(`create`, body, { headers });
       return response.data;
     } catch (err) {
-      console.log("error in catch query", err);
+      console.log(err);
       return err.response;
     }
   },
@@ -101,26 +97,52 @@ const eventQueries = {
       const response = await apiEvents.get(`/${id}`, { headers });
       return response.data.response.data;
     } catch (err) {
-      console.log("error in catch query", err);
+      console.log(err);
       return err.response;
     }
   },
 
   async organizerUpdateUser(body, id) {
     try {
-      console.log("paso por aca");
       const token = localStorage.getItem("token");
       const sanitizedToken = token ? token.replace(/"/g, "") : null;
       const headers = {
         Authorization: `Bearer ${sanitizedToken}`,
       };
-      const response = await apiEvents.put(`update/${id}`, body, {
-        headers,
-      });
-      console.log("response in organizerUpdateUser", response);
+      const response = await apiEvents.put(`update/${id}`, body, { headers });
       return response.data;
     } catch (err) {
-      console.log("error in catch query", err);
+      console.log(err);
+      return err.response.data;
+    }
+  },
+
+  async submitRating(body, id) {
+    try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await apiEvents.post(`vote/${id}`, body, { headers });
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      return err.response.data;
+    }
+  },
+
+  async submitComment(body, id) {
+    try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await apiEvents.post(`comment/${id}`, body, { headers });
+      return response.data;
+    } catch (err) {
+      console.log(err);
       return err.response.data;
     }
   },
