@@ -1,5 +1,5 @@
 import axios from "axios";
-import apiUrl from "../../apiUrl";
+import apiUrl from "../../apiUrl.js";
 
 const apiEvents = axios.create({
   baseURL: `${apiUrl}event/`,
