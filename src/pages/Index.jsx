@@ -85,7 +85,7 @@ export default function Index() {
         </div>
         <div className="p-4 rounded-lg text-center w-[24%] flex justify-center items-center bg-black shadow-lg shadow-black flex-col">
           <h4>Average Rating</h4>
-          <p>{dataBox(events).rating}</p>
+          <p>{dataBox(events).rating.toFixed(2)}</p>
         </div>
       </div>
       <div className="w-full max-w-7xl">
