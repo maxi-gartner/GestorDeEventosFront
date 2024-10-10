@@ -8,7 +8,7 @@ import authQueries from "../services/authQueries.js";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
-import alert from "../services/alerts/loading.js";
+import alert from "../services/alerts/swalAlert.js";
 
 export default function Layouts() {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ export default function Layouts() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      alert("Loading data...");
+      alert.loading("Loading data...");
       try {
         authQueries
           .loginWithToken(token)
@@ -41,15 +41,12 @@ export default function Layouts() {
           .catch((err) => {
             console.log("Error durante el login:", err);
             Swal.close();
-            Swal.fire({
-              title: "Error",
-              text: "Hubo un problema durante el inicio de sesión.",
-              icon: "error",
-            });
+            alert.error("Error during login: " + err.response.data.message);
           });
       } catch (error) {
         console.log("Error en el token:", error);
         Swal.close();
+        alert.error("Error during login: " + error);
       }
     }
   }, []);

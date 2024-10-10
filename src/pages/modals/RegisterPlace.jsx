@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import placesQueries from "../../services/placesQueries";
 import Swal from "sweetalert2";
-import alert from "../../services/alerts/loading";
+import alert from "../../services/alerts/swalAlert";
 
 export default function RegisterPlace({
   setModalRegisterPlace,
@@ -10,7 +10,7 @@ export default function RegisterPlace({
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
-    alert("Registering place");
+    alert.loading("Registering place");
     event.preventDefault();
 
     const name = event.target.name.value;
@@ -20,11 +20,7 @@ export default function RegisterPlace({
 
     if (!name || !address || !photo || !ocupancy) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "All fields are required",
-      });
+      alert.error("All fields are required");
       return;
     }
 
@@ -33,30 +29,17 @@ export default function RegisterPlace({
       const response = await placesQueries.createPlace(body);
       if (response.success === true) {
         Swal.close();
-        Swal.fire({
-          icon: "success",
-          title: response.message,
-          text: "Place successfully created.",
-          timer: 1500,
-          willClose: () => {
-            navigate("/adminPanel");
-          },
+        alert.success(response.message, () => {
+          navigate("/adminPanel");
         });
       } else {
         Swal.close();
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.data.message,
-        });
+        alert.error(response.data.message);
       }
     } catch (error) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.response?.data?.message || "An unexpected error occurred",
-      });
+      alert.error("Error registering place");
+      console.log("error", error.response.data.message);
     }
   };
 

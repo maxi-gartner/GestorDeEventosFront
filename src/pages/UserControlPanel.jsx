@@ -1,11 +1,11 @@
 //import { useState } from "react";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import authQueries from "../services/authQueries";
 import eventQueries from "../services/eventQueries";
 import { useDispatch } from "react-redux";
 import { savedUserLogin } from "../redux/actions/userAction";
+import alert from "../services/alerts/swalAlert";
 
 const UserControlPanel = () => {
   const dispatch = useDispatch();
@@ -26,23 +26,12 @@ const UserControlPanel = () => {
 
     authQueries.updateUser(user.data).then((data) => {
       if (data.data.success === false) {
-        Swal.fire({
-          title: "Error",
-          text: data.data.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        alert.error(data.data.message);
         return;
       }
-      Swal.fire({
-        title: "Success",
-        text: "The changes have been saved successfully.",
-        icon: "success",
-        confirmButtonText: "OK",
-        willClose: () => {
-          setUser(data.data.response);
-          dispatch(savedUserLogin(data.data.response));
-        },
+      alert.success("Profile updated successfully.", () => {
+        setUser(data.data.response);
+        dispatch(savedUserLogin(data.data.response));
       });
     });
   };
@@ -63,33 +52,19 @@ const UserControlPanel = () => {
       .unsubscribe(eventId)
       .then((data) => {
         if (data.data.success === false) {
-          Swal.fire({
-            title: "Error",
-            text: data.data.message,
-            icon: "error",
-            confirmButtonText: "OK",
-          });
+          alert.error(data.data.message);
           return;
         }
-        Swal.fire({
-          title: "Success",
-          text: "You have been unsubscribed from this event.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
+        alert.success("You have been unsubscribed from this event.");
         setUser(data.data.response);
       })
       .catch((error) => {
-        Swal.fire({
-          title: "Error",
-          text: error.response.data.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        alert.error("Error unsubscribing from this event.");
+        console.log("error", error.response.data.message);
       });
   }
   const capitalizeWords = (str) => {
-    if (!str) return ""; // Manejo de cadena vacía o undefined
+    if (!str) return "";
     return str
       .toLowerCase()
       .split(" ")

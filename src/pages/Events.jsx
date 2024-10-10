@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import eventQueries from "../services/eventQueries";
 import Swal from "sweetalert2";
-import alert from "../services/alerts/loading";
+import alert from "../services/alerts/swalAlert";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [filter, setFilter] = useState("");
-  console.log("events", events);
   if (events.length === 0) {
-    alert("Searching for available events...");
+    alert.loading("Searching for available events...");
   }
   if (events.length > 0) {
     Swal.close();

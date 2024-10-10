@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import eventQueries from "../../services/eventQueries";
-import alert from "../../services/alerts/loading";
+import alert from "../../services/alerts/swalAlert";
 
 export default function RegisterEvent({
   setModalEditEvent,
@@ -19,7 +19,7 @@ export default function RegisterEvent({
   }, [eventToEdit]);
 
   const handleUpdate = async (event) => {
-    alert("Updating event...");
+    alert.loading("Updating event...");
     event.preventDefault();
 
     const date = event.target.date.value;
@@ -52,11 +52,7 @@ export default function RegisterEvent({
     }
     if (Object.keys(body).length === 0) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No fields to update",
-      });
+      alert.error("No fields to update");
       return;
     }
 
@@ -66,35 +62,22 @@ export default function RegisterEvent({
         eventToUpdate.id
       );
       if (response.success === true) {
-        Swal.close();
         const response = await eventQueries.getAllEvents();
         setEvents(response);
-        Swal.fire({
-          icon: "success",
-          title: response.message,
-          text: "User successfully updated.",
-          timer: 1500,
-          willClose: () => {
-            navigate("/adminPanel");
-            setModalEditEvent(false);
-            setConteinerModals(false);
-          },
+        Swal.close();
+        alert.success(response.message, () => {
+          navigate("/adminPanel");
+          setModalEditEvent(false);
+          setConteinerModals(false);
         });
       } else {
         Swal.close();
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.message,
-        });
+        alert.error(response.message);
       }
     } catch (error) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.response.data.message,
-      });
+      console.log("error", error.response.data.message);
+      alert.error("Error updating user");
     }
   };
 

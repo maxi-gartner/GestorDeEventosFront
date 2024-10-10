@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import eventQueries from "../services/eventQueries";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import alert from "../services/alerts/loading";
+import alert from "../services/alerts/swalAlert";
 
 export default function DetailsEvent() {
   const navigate = useNavigate();
@@ -19,58 +19,34 @@ export default function DetailsEvent() {
   }, [id]);
 
   async function registerToEvent(id) {
-    alert("Registering for event...");
     try {
+      alert.loading("Registering for event...");
       const response = await eventQueries.registerToEvent(id);
       if (response.data.success === true) {
         Swal.close();
-        Swal.fire({
-          title: "Success",
-          text: response.data.message,
-          icon: "success",
-          confirmButtonText: "Confirm",
-          willClose: () => {
-            setIsRegistered(true);
-          },
+        console.log("response.data.message", response.data.message);
+        alert.success(response.data.message, () => {
+          setIsRegistered(true);
         });
       } else {
         if (response.data.success === false) {
           Swal.close();
-          Swal.fire({
-            title: "Error",
-            text: response.data.message,
-            icon: "error",
-            confirmButtonText: "Confirm",
-          });
+          alert.error(response.data.message);
         } else {
           Swal.close();
-          Swal.fire({
-            title: "You need these registrants to register for events.",
-            text: response.data.message,
-            icon: "error",
-            confirmButtonText: "Confirm",
-            showCancelButton: true,
-            cancelButtonText: "Go to Sign In",
-          }).then((result) => {
-            if (result.isDismissed) {
-              navigate("/signin");
-            }
+          alert.error(response.data.message, () => {
+            navigate("/signin");
           });
         }
       }
     } catch {
       Swal.close();
-      Swal.fire({
-        title: "Error",
-        text: "Error registering for event",
-        icon: "error",
-        confirmButtonText: "Confirm",
-      });
+      alert.error("Error registering for event");
     }
   }
 
   if (!event) {
-    alert("Loading event...");
+    alert.loading("Loading event...");
     return <></>;
   }
   if (event) {
@@ -81,7 +57,7 @@ export default function DetailsEvent() {
     setRating(e.target.value);
   };
   const submitRating = async () => {
-    alert("Submitting rating...");
+    alert.loading("Submitting rating...");
     try {
       const body = {
         vote: rating,
@@ -89,33 +65,14 @@ export default function DetailsEvent() {
       const response = await eventQueries.submitRating(body, id);
       setEvent(response.response.data);
       if (response.success === true) {
-        Swal.fire({
-          title: "Success",
-          text: response.message,
-          icon: "success",
-          confirmButtonText: "Confirm",
-        });
+        alert.success(response.message);
       } else {
-        Swal.fire({
-          title: "Error",
-          text: response.message,
-          icon: "error",
-          confirmButtonText: "Confirm",
-          willClose: () => {
-            Swal.close();
-          },
-        });
+        Swal.close();
+        alert.error(response.message);
       }
     } catch {
-      Swal.fire({
-        title: "Error",
-        text: "Error submitting rating",
-        icon: "error",
-        confirmButtonText: "Confirm",
-        willClose: () => {
-          Swal.close();
-        },
-      });
+      Swal.close();
+      alert.error("Error submitting rating");
     }
   };
   /* COMENTARIOS */
@@ -123,7 +80,7 @@ export default function DetailsEvent() {
     setComment(e.target.value);
   };
   const submitComment = async () => {
-    alert("Submitting comment...");
+    alert.loading("Submitting comment...");
     try {
       const body = {
         comment: comment,
@@ -131,36 +88,16 @@ export default function DetailsEvent() {
       const response = await eventQueries.submitComment(body, id);
       setEvent(response.response.data);
       if (response.success === true) {
-        Swal.fire({
-          title: "Success",
-          text: response.message,
-          icon: "success",
-          confirmButtonText: "Confirm",
-          willClose: () => {
-            Swal.close();
-          },
-        });
+        Swal.close();
+        alert.success(response.message);
+        setComment("");
       } else {
-        Swal.fire({
-          title: "Error",
-          text: response.message,
-          icon: "error",
-          confirmButtonText: "Confirm",
-          willClose: () => {
-            Swal.close();
-          },
-        });
+        Swal.close();
+        alert.error(response.message);
       }
     } catch {
-      Swal.fire({
-        title: "Error",
-        text: "Error submitting comment",
-        icon: "error",
-        confirmButtonText: "Confirm",
-        willClose: () => {
-          Swal.close();
-        },
-      });
+      Swal.close();
+      alert.error("Error submitting comment");
     }
   };
 

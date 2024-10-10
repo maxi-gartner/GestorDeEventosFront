@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import authQueries from "../../services/authQueries";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
-import alert from "../../services/alerts/loading";
+import alert from "../../services/alerts/swalAlert";
 
 export default function RegisterEvent({
   setModalEditUser,
@@ -19,7 +19,7 @@ export default function RegisterEvent({
   }, [userToEdit]);
 
   const handleRegister = async (event) => {
-    alert("Updating user...");
+    alert.loading("Updating user...");
     event.preventDefault();
 
     const email = event.target.email.value;
@@ -29,11 +29,7 @@ export default function RegisterEvent({
 
     if (resetPassword && repeatResetPassword !== resetPassword) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Passwords do not match",
-      });
+      alert.error("Passwords do not match");
       return;
     }
 
@@ -54,11 +50,7 @@ export default function RegisterEvent({
 
     if (Object.keys(body).length === 0) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No fields to update",
-      });
+      alert.error("No fields to update");
       return;
     }
 
@@ -67,32 +59,19 @@ export default function RegisterEvent({
       if (response.success === true) {
         setUsers(response.response);
         Swal.close();
-        Swal.fire({
-          icon: "success",
-          title: response.message,
-          text: "User successfully updated.",
-          timer: 1500,
-          willClose: () => {
-            navigate("/adminPanel");
-            setModalEditUser(false);
-            setConteinerModals(false);
-          },
+        alert.success(response.message, () => {
+          navigate("/adminPanel");
+          setModalEditUser(false);
+          setConteinerModals(false);
         });
       } else {
         Swal.close();
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.data.message,
-        });
+        alert.error(response.data.message);
       }
     } catch (error) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.response.data.message,
-      });
+      console.log("error", error.response.data.message);
+      alert.error("Error updating user");
     }
   };
 

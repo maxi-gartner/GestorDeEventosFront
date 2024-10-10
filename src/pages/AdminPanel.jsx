@@ -9,7 +9,7 @@ import EditEvent from "./modals/EditEvent";
 import EditUser from "./modals/EditUser";
 import SingUp from "./SignUp";
 import Swal from "sweetalert2";
-import alert from "../services/alerts/loading";
+import alert from "../services/alerts/swalAlert";
 
 const AdminPanel = () => {
   const userEmail = useSelector((state) => state.user.userData.email) || "";
@@ -56,39 +56,24 @@ const AdminPanel = () => {
   };
 
   const handleDeleteUser = (email) => {
-    alert("Deleting user...");
+    alert.loading("Deleting user...");
     authQueries
       .deleteUser(email)
       .then((data) => {
         if (data.success === false) {
           Swal.close();
-          Swal.fire({
-            title: "Error",
-            text: data.data.message,
-            icon: "error",
-            confirmButtonText: "OK",
-          });
+          alert.error(data.data.message);
           return;
         }
         Swal.close();
-        Swal.fire({
-          title: "Success",
-          text: data.message,
-          icon: "success",
-          confirmButtonText: "OK",
-          willClose: () => {
-            setUsers(data.response);
-          },
+        alert.success("User deleted successfully", () => {
+          setUsers(data.response);
         });
       })
       .catch((error) => {
         Swal.close();
-        Swal.fire({
-          title: "Error",
-          text: error.response.data.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        alert.error("Error deleting user");
+        console.log("error", error.response.data.message);
       });
   };
 

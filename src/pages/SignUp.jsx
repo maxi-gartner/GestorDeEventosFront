@@ -2,7 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import authQueries from "../services/authQueries";
 import Swal from "sweetalert2";
 import { useState } from "react";
-import alert from "../services/alerts/loading";
+import alert from "../services/alerts/swalAlert";
 
 export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
   const handleRegister = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
-    alert("Signing up...");
+    alert.loading("Signing up...");
 
     const { name, lastname, email, password, confirmPassword, age, genre } =
       event.target;
@@ -25,22 +25,14 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
       !age.value ||
       !genre.value
     ) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "All fields are required",
-      });
+      alert.error("All fields are required");
       setIsSubmitting(false);
       Swal.close();
       return;
     }
 
     if (password.value !== confirmPassword.value) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Passwords do not match",
-      });
+      alert.error("Passwords do not match");
       setIsSubmitting(false);
       Swal.close();
       return;
@@ -59,30 +51,17 @@ export default function SignUp({ setModalRegisterUser, setConteinerModals }) {
       const response = await authQueries.signup(body);
       if (response.success) {
         Swal.close();
-        Swal.fire({
-          icon: "success",
-          title: response.message,
-          text: "Redirecting to login...",
-          timer: 1500,
-          willClose: () => {
-            navigate("/signin");
-          },
+        alert.success(response.message, () => {
+          navigate("/signin");
         });
       } else {
         Swal.close();
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.data.message,
-        });
+        alert.error(response.data.message);
       }
     } catch (error) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.response?.data?.message || "An unexpected error occurred.",
-      });
+      alert.error("Error signing up");
+      console.log("error", error.response.data.message);
     } finally {
       setIsSubmitting(false);
     }

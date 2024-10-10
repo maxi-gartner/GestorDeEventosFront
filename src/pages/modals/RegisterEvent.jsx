@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import placesQueries from "../../services/placesQueries";
-import alert from "../../services/alerts/loading";
+import alert from "../../services/alerts/swalAlert";
 
 export default function RegisterEvent({
   setModalRegisterEvent,
@@ -15,7 +15,7 @@ export default function RegisterEvent({
   const user = useSelector((state) => state.user.userData);
 
   const handleRegister = async (event) => {
-    alert("Registering event");
+    alert.loading("Registering event");
     event.preventDefault();
 
     const place = event.target.place.value;
@@ -27,11 +27,7 @@ export default function RegisterEvent({
 
     if (!place || !date || !name || !description || !minimumAge || !photo) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "All fields are required",
-      });
+      alert.error("All fields are required");
       return;
     }
 
@@ -40,30 +36,17 @@ export default function RegisterEvent({
       const response = await eventQueries.createEvent(body);
       if (response.success === true) {
         Swal.close();
-        Swal.fire({
-          icon: "success",
-          title: response.message,
-          text: "Event successfully created.",
-          timer: 1500,
-          willClose: () => {
-            navigate("/events");
-          },
+        alert.success(response.message, () => {
+          navigate("/events");
         });
       } else {
         Swal.close();
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.data.message,
-        });
+        alert.error(response.data.message);
       }
     } catch (error) {
       Swal.close();
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.response.data.message,
-      });
+      alert.error("Error registering event");
+      console.log("error", error.response.data.message);
     }
   };
 

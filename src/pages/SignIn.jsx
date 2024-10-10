@@ -4,58 +4,36 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { savedUserLogin } from "../redux/actions/userAction";
 import Swal from "sweetalert2";
-import alert from "../services/alerts/loading";
+import alert from "../services/alerts/swalAlert";
 
 export default function SignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
-    alert("Signing in...");
+    alert.loading("Signing in...");
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     const body = { email, password };
     authQueries.signin(body).then((data) => {
       if (data.success === false) {
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: data.message,
-          showConfirmButton: false,
-          timer: 1500,
-          willClose: () => {
-            Swal.close();
-          },
-        });
+        Swal.close();
+        alert.error(data.message);
         return;
       }
       dispatch(savedUserLogin(data.response));
       localStorage.setItem("token", JSON.stringify(data.response.token));
 
       if (data.success === true) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: data.message,
-          showConfirmButton: false,
-          timer: 1500,
-          willClose: () => {
-            navigate("/");
-            Swal.close();
-          },
+        Swal.close();
+        alert.success("Signed in successfully", () => {
+          navigate("/");
         });
       } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: data.message,
-          showConfirmButton: false,
-          timer: 1500,
-          willClose: () => {
-            Swal.close();
-          },
-        });
+        Swal.close();
+        alert.error("Error signing in");
+        console.log("error", data.message);
       }
     });
   };
