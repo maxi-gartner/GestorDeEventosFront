@@ -19,7 +19,6 @@ const dataBox = (events) => {
       ratingCount++;
     }
   });
-
   const averageRating = ratingCount > 0 ? rating / ratingCount : 0;
 
   return {
