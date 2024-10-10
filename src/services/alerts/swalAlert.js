@@ -8,10 +8,12 @@ const alert = {
       allowEscapeKey: false,
       background: "#1e1e1e",
       color: "#fff",
-      confirmButtonColor: "#3085d6",
+      showConfirmButton: false,
+      timerProgressBar: true,
+      width: "300px",
+      position: "top-end",
       customClass: {
         popup: "dark-popup",
-        confirmButton: "dark-confirm-button",
       },
       didOpen: () => {
         Swal.showLoading();
@@ -27,10 +29,13 @@ const alert = {
       icon: "success",
       background: "#1e1e1e",
       color: "#fff",
-      confirmButtonColor: "#3085d6",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      width: "300px",
+      position: "top-end",
       customClass: {
         popup: "dark-popup",
-        confirmButton: "dark-confirm-button",
       },
       willClose: willCloseCallback,
     });
@@ -43,26 +48,32 @@ const alert = {
       icon: "error",
       background: "#1e1e1e",
       color: "#fff",
-      confirmButtonColor: "#d33",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      width: "300px",
+      position: "top-end",
       customClass: {
         popup: "dark-popup",
-        confirmButton: "dark-confirm-button",
       },
       willClose: willCloseCallback,
     });
   },
 
-  warning(message, title = "Advertencia", willCloseCallback = null) {
+  warning(message, willCloseCallback = null) {
     Swal.fire({
-      title: title,
+      title: "Warning",
       text: message,
       icon: "warning",
       background: "#1e1e1e",
       color: "#fff",
-      confirmButtonColor: "#f39c12",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      width: "300px",
+      position: "top-end",
       customClass: {
         popup: "dark-popup",
-        confirmButton: "dark-confirm-button",
       },
       willClose: willCloseCallback,
     });

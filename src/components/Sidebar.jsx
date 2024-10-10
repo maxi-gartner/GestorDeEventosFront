@@ -90,18 +90,20 @@ function Sidebar({ open, setOpen, navigation, user }) {
             </li>
           )} */}
           <li>
-            <Link
-              key="logout" // Esto está bien
-              to="/"
-              className="block rounded-md mt-7 px-3 py-2 text-base font-bold w-full text-center bg-red-400 text-black"
-              onClick={() => {
-                localStorage.clear();
-                dispatch(logout());
-                navigate("/");
-              }}
-            >
-              Logout
-            </Link>
+            {token && (
+              <Link
+                key="logout"
+                to="/"
+                className="block rounded-md mt-7 px-3 py-2 text-base font-bold w-full text-center bg-red-400 text-black"
+                onClick={() => {
+                  localStorage.clear();
+                  dispatch(logout());
+                  navigate("/");
+                }}
+              >
+                Logout
+              </Link>
+            )}
           </li>
         </ul>
       </div>

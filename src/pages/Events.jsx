@@ -21,10 +21,10 @@ export default function Events() {
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
-
-  const filteredEvents = events.filter((event) =>
-    event.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filteredEvents = events.filter((event) => {
+    const regex = new RegExp(filter.trim().replace(/\s+/g, "\\s+"), "i");
+    return regex.test(event.name) || regex.test(event.description);
+  });
 
   return (
     <div>

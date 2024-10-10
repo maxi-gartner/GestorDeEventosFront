@@ -127,7 +127,7 @@ const eventQueries = {
       const response = await apiEvents.post(`vote/${id}`, body, { headers });
       return response.data;
     } catch (err) {
-      console.log(err);
+      console.log("error en catch queries", err.response.data);
       return err.response.data;
     }
   },
@@ -143,7 +143,7 @@ const eventQueries = {
       return response.data;
     } catch (err) {
       console.log(err);
-      return err.response.data;
+      return err;
     }
   },
 };
