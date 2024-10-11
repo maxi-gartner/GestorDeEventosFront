@@ -58,12 +58,17 @@ export default function Index() {
             alt="Descripción de la imagen"
             className="object-cover w-full max-w-7xl h-full max-h-96"
           />
-          <button
-            className="absolute bottom-2 sm:bottom-8 left-4 xl:left-32 flex sm:inline-flex justify-center items-center bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus-visible:ring ring-blue-300 text-white font-semibold text-center rounded-md outline-none transition duration-100 px-5 py-2"
-            onClick={() => navigate("/events")}
-          >
-            See Available Events
-          </button>
+          <div className="absolute bottom-6 sm:bottom-8 left-6 xl:left-24 transform -rotate-12">
+            <div className="relative w-36">
+              <div className="absolute -inset-2 rounded-lg bg-gradient-to-r from-pink-600 to-yellow-600 opacity-75 blur"></div>
+              <button
+                className="  sm:inline-flex bg-gradient-to-r from-pink-500 to-yellow-500 hover:bg-gradient-to-l font-extrabold text-lg hover:shadow-xl outline-none transition duration-300 ease-in-out transform hover:scale-110 h-12 w-40 relative items-center justify-center rounded-lg bg-slate-900 text-black"
+                onClick={() => navigate("/events")}
+              >
+                <span className="relative z-10">Explore Now!</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Contenido a la derecha */}
