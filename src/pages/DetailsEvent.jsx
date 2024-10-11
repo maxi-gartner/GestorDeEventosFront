@@ -316,7 +316,7 @@ export default function DetailsEvent() {
                 <img
                   src={comment.userId.photo}
                   alt={`${comment.userId.name}`}
-                  className="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full object-cover"
                   onError={(e) =>
                     (e.target.src =
                       "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")
