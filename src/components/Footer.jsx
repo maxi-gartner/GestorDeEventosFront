@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="bg-gray-800 text-white py-6 mt-4">
@@ -7,34 +9,36 @@ export default function Footer() {
             <h5 className="text-lg font-semibold">Information</h5>
             <ul className="list-none mt-2">
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <Link to="/about" className="text-gray-400 hover:text-white">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <Link to="#" className="text-gray-400 hover:text-white">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <Link to="#" className="text-gray-400 hover:text-white">
                   Terms of Service
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
           <div className="mb-4 md:mb-0">
             <h5 className="text-lg font-semibold">Contact</h5>
-            <p className="text-gray-400 mt-2">Email: info@example.com</p>
-            <p className="text-gray-400">Phone: +54 9 11 1234-5678</p>
+            <p className="text-gray-400 mt-2">
+              Email: maxi.gartner@hotmail.com
+            </p>
+            <p className="text-gray-400">Phone: +54 343 5329910</p>
           </div>
 
           <div>
             <h5 className="text-lg font-semibold">Follow Us</h5>
             <div className="flex space-x-4 mt-2">
               <a
-                href="https://github.com/your-repo"
+                href="https://github.com/maxi-gartner"
                 className="text-gray-400 hover:text-white"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -48,7 +52,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.instagram.com/yourprofile"
+                href="https://www.instagram.com/maxi.gartner/"
                 className="text-gray-400 hover:text-white"
                 target="_blank"
                 rel="noopener noreferrer"
