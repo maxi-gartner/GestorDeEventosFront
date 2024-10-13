@@ -15,12 +15,15 @@ export default function Layouts() {
 
   //CAPTUDADOR AUTOMATICO DE EVENTOS
   useEffect(() => {
+    alert.loading("Loading data...");
     eventQueries
       .getAllEvents()
       .then((data) => {
+        Swal.close();
         dispatch(savedEvents(data));
       })
       .catch((err) => {
+        Swal.close();
         console.log(err);
       });
   }, []);
