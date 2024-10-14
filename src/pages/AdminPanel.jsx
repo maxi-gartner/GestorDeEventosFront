@@ -7,6 +7,7 @@ import RegisterEvent from "./modals/RegisterEvent";
 import RegisterPlace from "./modals/RegisterPlace";
 import EditEvent from "./modals/EditEvent";
 import EditUser from "./modals/EditUser";
+import EditPlace from "./modals/EditPlace";
 import SingUp from "./SignUp";
 import Swal from "sweetalert2";
 import alert from "../services/alerts/swalAlert";
@@ -31,6 +32,8 @@ const AdminPanel = () => {
   const [modalEditEvent, setModalEditEvent] = useState(false);
   const [userToEdit, setUserToEdit] = useState(null);
   const [eventToEdit, setEventToEdit] = useState(null);
+  const [placeToEdit, setPlaceToEdit] = useState(null);
+  const [modalEditPlace, setModalEditPlace] = useState(false);
 
   useEffect(() => {
     if (userEmail) {
@@ -152,6 +155,17 @@ const AdminPanel = () => {
                 setConteinerModals={setConteinerModals}
                 eventToEdit={eventToEdit}
                 setEvents={setEvents}
+              />
+            </div>
+          ) : null}
+
+          {modalEditPlace ? (
+            <div>
+              <EditPlace
+                setModalEditPlace={setModalEditPlace}
+                setConteinerModals={setConteinerModals}
+                placeToEdit={placeToEdit}
+                setPlaces={setPlaces}
               />
             </div>
           ) : null}
@@ -342,7 +356,11 @@ const AdminPanel = () => {
                   <div className="flex justify-between gap-6">
                     <button
                       className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200 ease-in-out w-24"
-                      /* onClick={() => handleEdit(user.email)} */
+                      onClick={() => {
+                        setModalEditPlace(!modalEditPlace),
+                          setConteinerModals(!conteinerModals);
+                        setPlaceToEdit(place.data.id);
+                      }}
                     >
                       Edit
                     </button>

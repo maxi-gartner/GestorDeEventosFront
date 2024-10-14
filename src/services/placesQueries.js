@@ -19,11 +19,16 @@ const placesQueries = {
 
   async getPlace(id) {
     try {
-      const response = await axios.get(`${apiUrl}place/${id}`);
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await axios.get(`${apiUrl}place/${id}`, { headers });
       return response.data.response.data;
     } catch (err) {
       console.log(err);
-      return [];
+      return err;
     }
   },
 
@@ -57,9 +62,28 @@ const placesQueries = {
         Authorization: `Bearer ${sanitizedToken}`,
       };
       const response = await axios.delete(`${apiUrl}place/${id}`, { headers });
-      console.log("response", response);
       const allPlaces = await this.getAllPlaces();
-      console.log("All places after delete:", allPlaces);
+      return {
+        data: response.data,
+        allPlaces: allPlaces,
+      };
+    } catch (err) {
+      console.log("error in catch query", err.response.data);
+      return err;
+    }
+  },
+
+  async editPlace(id, body) {
+    try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await axios.put(`${apiUrl}place/${id}`, body, {
+        headers,
+      });
+      const allPlaces = await this.getAllPlaces();
       return {
         data: response.data,
         allPlaces: allPlaces,
