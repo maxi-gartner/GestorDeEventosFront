@@ -6,6 +6,7 @@ import alert from "../../services/alerts/swalAlert";
 export default function RegisterPlace({
   setModalRegisterPlace,
   setConteinerModals,
+  setPlaces,
 }) {
   const navigate = useNavigate();
 
@@ -27,19 +28,20 @@ export default function RegisterPlace({
     try {
       const body = { name, address, photo, ocupancy };
       const response = await placesQueries.createPlace(body);
-      if (response.success === true) {
+      console.log("response", response);
+      if (response.data.success === true) {
         Swal.close();
-        alert.success(response.message, () => {
+        setPlaces(response.allPlaces);
+        alert.success(response.data.message, () => {
           navigate("/adminPanel");
         });
       } else {
         Swal.close();
-        alert.error(response.data.message);
+        alert.error(response.data.response.data.message);
       }
-    } catch (error) {
+    } catch (err) {
       Swal.close();
-      alert.error("Error registering place");
-      console.log("error", error.response.data.message);
+      console.log("error", err);
     }
   };
 

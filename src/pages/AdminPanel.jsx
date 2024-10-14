@@ -10,8 +10,10 @@ import EditUser from "./modals/EditUser";
 import SingUp from "./SignUp";
 import Swal from "sweetalert2";
 import alert from "../services/alerts/swalAlert";
+import { useNavigate } from "react-router-dom";
 
 const AdminPanel = () => {
+  const navigate = useNavigate();
   const userEmail = useSelector((state) => state.user.userData.email) || "";
   const role = useSelector((state) => state.user.userData.role) || "";
   const eventsData = useSelector((state) => state.events.eventsData);
@@ -77,6 +79,28 @@ const AdminPanel = () => {
       });
   };
 
+  const handleDeletePlace = (id) => {
+    alert.loading("Deleting place");
+    placesQueries
+      .deletePlace(id)
+      .then((data) => {
+        if (data.data.success === true) {
+          Swal.close();
+          setPlaces(data.allPlaces);
+          alert.success(data.data.message, () => {
+            navigate("/adminPanel");
+          });
+        } else {
+          Swal.close();
+          alert.error(data.data.message);
+        }
+      })
+      .catch((err) => {
+        Swal.close();
+        console.log(err);
+      });
+  };
+
   return (
     <div className="container mx-auto p-6 relative">
       {/* modales */}
@@ -96,6 +120,7 @@ const AdminPanel = () => {
               <RegisterPlace
                 setModalRegisterPlace={setModalRegisterPlace}
                 setConteinerModals={setConteinerModals}
+                setPlaces={setPlaces}
               />
             </div>
           ) : null}
@@ -323,7 +348,7 @@ const AdminPanel = () => {
                     </button>
                     <button
                       className="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-200 ease-in-out w-24"
-                      /* onClick={() => handleDelete(user.email)} */
+                      onClick={() => handleDeletePlace(place.data.id)}
                     >
                       Delete
                     </button>

@@ -37,10 +37,35 @@ const placesQueries = {
       const response = await axios.post(`${apiUrl}place/create`, body, {
         headers,
       });
-      console.log("response in createPlace", response);
-      return response.data;
+      const allPlaces = await this.getAllPlaces();
+      console.log("All places after create:", allPlaces);
+      return {
+        data: response.data,
+        allPlaces: allPlaces,
+      };
     } catch (err) {
-      console.log("error in catch query", err);
+      console.log("error in catch query", err.response.data);
+      return err;
+    }
+  },
+
+  async deletePlace(id) {
+    try {
+      const token = localStorage.getItem("token");
+      const sanitizedToken = token ? token.replace(/"/g, "") : null;
+      const headers = {
+        Authorization: `Bearer ${sanitizedToken}`,
+      };
+      const response = await axios.delete(`${apiUrl}place/${id}`, { headers });
+      console.log("response", response);
+      const allPlaces = await this.getAllPlaces();
+      console.log("All places after delete:", allPlaces);
+      return {
+        data: response.data,
+        allPlaces: allPlaces,
+      };
+    } catch (err) {
+      console.log("error in catch query", err.response.data);
       return err;
     }
   },
