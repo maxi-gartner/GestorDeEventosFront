@@ -5,10 +5,11 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import alert from "../services/alerts/swalAlert";
 import { useSelector } from "react-redux";
+import encryption from "../../encryption";
 
 export default function DetailsEvent() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  let { id } = useParams();
   const user = useSelector((state) => state.user.userData);
   const [event, setEvent] = useState(null);
   const [isRegistered, setIsRegistered] = useState(false);
@@ -17,6 +18,7 @@ export default function DetailsEvent() {
   const [userVoted, setUserVoted] = useState(false);
   const [userComents, setUserComments] = useState(false);
   const [vote, setVote] = useState(null);
+  id = encryption.decrypt(id);
 
   useEffect(() => {
     eventQueries.getEvent(id).then(setEvent);

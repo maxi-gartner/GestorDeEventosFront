@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import placesQueries from "../services/placesQueries";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import encryption from "../../encryption";
 
 const dataBox = (events) => {
   let attendees = 0;
@@ -101,34 +102,37 @@ export default function Index() {
         </h2>
         <div className="flex justify-evenly w-full max-w-7xl flex-wrap">
           {nearbyEvents.length > 0 ? (
-            nearbyEvents.map((event, index) => (
-              <Link
-                to={`/event/${event.id}`}
-                key={index}
-                className="mb-4 flex flex-col gap-1 py-2 sm:w-2xl justify-center items-center"
-              >
-                <h2 className="text-lg font-semibold mb-2 w-full text-center">
-                  {event.name}
-                  <span className="text-lg font-semibold mb-2 w-full text-center">
-                    {" "}
-                    ({new Date(event.date).toLocaleDateString()})
-                  </span>
-                </h2>
-                <img
-                  src={event.photo}
-                  alt={event.name}
-                  className="w-[35rem] h-[200px] object-cover sm:h-60 shadow-lg shadow-black mb-2"
-                  onError={(e) =>
-                    (e.target.src =
-                      "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")
-                  }
-                />
-                <p>{event.description}</p>
-                <p>
-                  <strong>Minimum Age:</strong> {event.minimumAge}
-                </p>
-              </Link>
-            ))
+            nearbyEvents.map((event, index) => {
+              const encryptedId = encryption.encrypt(event.id);
+              return (
+                <Link
+                  to={`/event/${encryptedId}`}
+                  key={index}
+                  className="mb-4 flex flex-col gap-1 py-2 sm:w-2xl justify-center items-center"
+                >
+                  <h2 className="text-lg font-semibold mb-2 w-full text-center">
+                    {event.name}
+                    <span className="text-lg font-semibold mb-2 w-full text-center">
+                      {" "}
+                      ({new Date(event.date).toLocaleDateString()})
+                    </span>
+                  </h2>
+                  <img
+                    src={event.photo}
+                    alt={event.name}
+                    className="w-[35rem] h-[200px] object-cover sm:h-60 shadow-lg shadow-black mb-2"
+                    onError={(e) =>
+                      (e.target.src =
+                        "https://static.vecteezy.com/system/resources/previews/004/435/751/non_2x/404-error-page-with-black-cat-illustrations-not-found-system-updates-uploading-operation-computing-installation-programs-vector.jpg")
+                    }
+                  />
+                  <p>{event.description}</p>
+                  <p>
+                    <strong>Minimum Age:</strong> {event.minimumAge}
+                  </p>
+                </Link>
+              );
+            })
           ) : (
             <></>
           )}
